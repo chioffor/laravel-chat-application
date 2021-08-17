@@ -1,0 +1,115 @@
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    background-color: brown;
+}
+
+.favorites {
+    font-size: small;
+    font-weight: bold;
+}
+
+.sub > .profile-pic {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;  
+    padding: 20px;
+}
+
+.list-group-item {
+    border: none;
+}
+
+.bi-plus-lg, .drop-item {
+    cursor: pointer;
+}
+
+/* .list-group-item:hover {
+    background-color: darkgrey;
+} */
+
+.create-new-group:hover {
+    background-color: lightgrey;
+    padding: 5px 10px;
+}
+
+/* .container {
+    height: 100vh;
+    overflow: auto;
+} */
+
+.others, .yours {
+    padding: 4px 10px 10px 15px;
+}
+
+.others-text, .yours-text {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.group-page-top-sub-info {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.group-page-top, .canvas-top {
+    border-bottom: 1px solid;
+}
+
+.chat-text {
+    word-wrap: break-word;
+    width: auto;
+    font-size: 14px;
+}
+
+@media (max-width: 900px)  {
+    .container-fluid {
+        width: 100vw;
+        height: 100vh;
+        
+    }
+}
+
+@media screen and (min-width: 900px) { 
+    .container-fluid {
+      height: 100vh;
+      width: 80vw;
+      overflow: auto;
+      margin-bottom: 0;
+    }
+}
+
+.group-page-chat-div {
+    height: 70vh;
+    overflow-y: scroll;
+    
+}
+
+.group-page-chat-input-div {
+    padding: 10px 40px;
+    border: none;    
+}
+
+.form-control:focus {
+    box-shadow: none;
+}
+
+#info-button {
+    cursor: pointer;
+    font-size: inherit;
+}
+
+
+
+.members-list-item > .sub > .profile-pic {
+    width: 10px;
+    height: 10px;
+    padding: 10px;
+    background-color: aliceblue;
+}
+
+.group-chats-count {
+    background-color: black;
+    padding: 3px 10px;
+    font-size: small;    
+}
