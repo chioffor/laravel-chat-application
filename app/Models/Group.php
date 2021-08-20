@@ -16,7 +16,7 @@ class Group extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'group_user', 'group_id', 'user_id');
+        return $this->belongsToMany(User::class, 'group_user', 'group_id', 'user_id')->withPivot('unreadCount');
     }
 
     public function chats()
@@ -31,4 +31,6 @@ class Group extends Model
         else
             return false;
     }
+
+    
 }

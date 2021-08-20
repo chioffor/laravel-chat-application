@@ -1,4 +1,4 @@
-export const chatTemplate = (data) => {
+export const chatTemplate = (type, data) => {
     return (
         `<li class="list-group-item d-flex mt-1 sub">
             <div class="profile-pic rounded-circle me-2 mt-1"></div>
@@ -35,14 +35,21 @@ export const appendUserToMembersList = (name) => {
     )
 }
 
-export const updateChatsCount = (info, id) => {
-    let element = $('#' + id);
-    let val = Number(element.text());
-    switch(info) {
-        case 'add-one':
-            return element.text(val + 1);
-        case 'reset':
-            return element.text(90);
+export const updateChatsCount = (info, id, url) => {
+    const data = {
+        id: id,
+        url: url,
+    };
 
-    }
+    $.post('/updateChatsCount', data, function(data) {
+        let element = $('#' + id);
+        let val = Number(element.text());
+        switch(info) {
+            case 'add-one':
+                return element.text(val + 1);
+            case 'reset':
+                return element.text(90);
+
+        }
+    });    
 }

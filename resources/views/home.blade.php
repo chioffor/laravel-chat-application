@@ -23,26 +23,36 @@
             <div><i class="bi bi-plus-lg"></i></div>                
         </div>
         <ul class="list-group mb-3 collapse" id="favorites-list">
-            <li class="list-group-item bg-light rounded fw-bold"># Pelican room</li>
+            @forelse ($user->favorites as $group)
+                <a href="{{ url('/home/'.$group->id) }}" class="list-group-item bg-light rounded fw-bold"># {{ $group->name }}</a>
+            @empty
+                <li class="list-group-item bg-light rounded fw-bold"># No groups</li>
+            @endforelse
         </ul>
     </div>
 
     <div class="direct-messages-div mb-3">
-        <div class="d-flex justify-content-between drop-item btn mb-2" data-bs-toggle="collapse" data-bs-target="#direct-messages-list" aria-expanded="false">
+        <div class="d-flex justify-content-between drop-item btn" data-bs-toggle="collapse" data-bs-target="#direct-messages-list" aria-expanded="false">
             <div class="text-muted">DIRECT MESSAGES</div>
             <div class="yoo"><i class="bi bi-plus-lg"></i></div>
         </div>
         <ul class="list-group collapse" id="direct-messages-list">
-            <li class="list-group-item btn">
-            <div class="top d-flex justify-content-between">
-                <div class="d-flex sub align-items-center">
-                    <div class="profile-pic rounded-circle me-2"></div>
-                    <div class="fw-bold">Chiks Offor</div> 
-                </div>
-                <div class="badges">1</div>            
-            </div>
-            </li>
-            <li class="list-group-item btn">
+            @forelse ($user->directs as $direct)
+                <a href="{{ url('/home/private/'.$direct->id) }}" class="list-group-item">
+                    <div class="top d-flex justify-content-between">
+                        <div class="d-flex sub align-items-center my-auto">
+                            <div class="profile-pic rounded-circle me-2"></div>
+                            <div class="fw-bold">{{ $direct->friend($user->id)->name }}</div> 
+                        </div>
+                        <div class="text-white group-chats-count my-auto" id="<?php echo $direct->id; ?>">{{ $direct->pivot->unreadCount }}</div>
+                    </div>
+                </a>
+            @empty
+                <li class="list-group-item">
+                    No directs
+                </li>
+            @endforelse
+            <!-- <li class="list-group-item btn">
                 <div class="top d-flex justify-content-between">
                     <div class="d-flex sub align-items-center">
                         <div class="profile-pic rounded-circle me-2"></div>
@@ -59,12 +69,12 @@
                     </div>
                     <div class="badges">1</div>            
                 </div>
-            </li>
+            </li> -->
         </ul>
     </div>
 
     <div class="groups-div">
-        <div class="d-flex justify-content-between mb-2 btn" data-bs-toggle="collapse" data-bs-target="#groups-list">
+        <div class="d-flex justify-content-between mb-2 btn drop-item" data-bs-toggle="collapse" data-bs-target="#groups-list">
             <div class="text-muted">GROUPS</div>
             <div><i class="bi bi-plus-lg"></i></div>
         </div>
@@ -88,7 +98,7 @@
                     <div><i class="bi bi-plus"></i></div>
                 </div>                                          
                     
-                <ul class="list-group collapse show" id="your-groups">
+                <ul class="list-group collapse" id="your-groups">
                     @forelse ($user->groups as $group)
                         @if ($group->users->contains('id', '=', $user->id))                  
                             <a class="list-group-item" href="{{ url('/home/'.$group->id) }}">

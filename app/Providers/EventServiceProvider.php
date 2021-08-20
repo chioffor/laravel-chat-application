@@ -7,12 +7,12 @@ use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
-use App\Events\MemberJoined;
+use App\Events\ClickedFavorite;
 use App\Events\ChatSent;
 use App\Events\UserJoinedGroup;
 use App\Events\ReadChatMessage;
 use App\Listeners\SendToGroupMembers;
-use App\Listeners\AddMemberToGroup;
+use App\Listeners\UpdateFavorites;
 use App\Listeners\NotifyGroupMembers;
 use App\Listeners\ResetChatCount;
 
@@ -24,8 +24,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        MemberJoined::class => [
-            AddMemberToGroup::class,
+        ClickedFavorite::class => [
+            UpdateFavorites::class,
         ],
         ChatSent::class => [
             SendToGroupMembers::class,

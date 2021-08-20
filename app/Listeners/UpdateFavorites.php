@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Events\MemberJoined;
+use App\Events\ClickedFavorite;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class AddMemberToGroup
+class UpdateFavorites
 {
     /**
      * Create the event listener.
@@ -21,10 +21,10 @@ class AddMemberToGroup
     /**
      * Handle the event.
      *
-     * @param  MemberJoined  $event
+     * @param  ClickedFavorite  $event
      * @return void
      */
-    public function handle(MemberJoined $event)
+    public function handle(ClickedFavorite $event)
     {
         //
     }

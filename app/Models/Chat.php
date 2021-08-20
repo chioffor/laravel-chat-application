@@ -24,5 +24,10 @@ class Chat extends Model
         return $this->created_at->format('H:i');
     }
 
+    public function direct()
+    {
+        return $this->belongsTo(Direct::class);
+    }
+
     
 }

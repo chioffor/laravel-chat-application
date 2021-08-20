@@ -1842,13 +1842,13 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers */ "./resources/js/helpers.js");
+/* harmony import */ var _chatHelpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chatHelpers */ "./resources/js/chatHelpers.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./helpers */ "./resources/js/helpers.js");
 var _require = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js"),
     toArray = _require.toArray;
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-__webpack_require__(/*! ./helpers */ "./resources/js/helpers.js");
 
 
 $.ajaxSetup({
@@ -1861,36 +1861,10 @@ function displayCreateInputDiv() {
   $('#group-form').prepend("<div class=\"input-group mb-2 w-50\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Choose a name\" name=\"group-name\">\n            <button type=\"button\" class=\"btn btn-outline-secondary\">submit</button>\n        </div>");
 }
 
-function getMessage(id) {
-  return $(id).val();
-}
-
-function zeroOutTextArea(id) {
-  $(id).val('');
-}
-
 var incrementMembersCount = function incrementMembersCount() {
   var val = Number($('#member-count').text());
   $('#member-count').text(val + 1);
 };
-
-function sendChatData() {
-  var elementId = '.message';
-  var message = getMessage(elementId);
-  var url = window.location.href;
-  var groupID = id; //alert(groupID);
-
-  var data = {
-    message: message,
-    url: url,
-    groupID: groupID
-  };
-  $.post('/chat-message', data, function (data) {
-    console.log(data);
-  }); //alert(message);
-
-  zeroOutTextArea(elementId);
-}
 
 function appendChat(template) {
   $('#chat-message-info-list-item').append(template);
@@ -1909,26 +1883,46 @@ $(".create-new-group").on("click", function () {
   this.remove();
   displayCreateInputDiv();
 });
-$('.send').on("click", function (e) {
+$(".send").on("click", function (e) {
   e.preventDefault();
-  sendChatData();
+  (0,_chatHelpers__WEBPACK_IMPORTED_MODULE_0__.sendChatData)();
+});
+$(".bi-star-fill").on("click", function () {
+  $.post('/favorite', {
+    id: id
+  }, function (data) {
+    console.log('success');
+  });
+});
+$(".members-list-item").mouseover(function () {
+  $(this).find(".select-dots").css('visibility', 'visible');
+});
+$(".members-list-item").mouseleave(function () {
+  $(this).find(".select-dots").css('visibility', 'hidden');
 });
 Echo["private"]('room').listen('ChatSent', function (e) {
   var url = window.location.href;
-  if (checkUrl(e.data.url.group)) appendChat((0,_helpers__WEBPACK_IMPORTED_MODULE_0__.chatTemplate)(e.data));
-  if (checkUrl(e.data.url.home)) (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.updateChatsCount)('add-one', e.data.id);
+  if (checkUrl(e.data.url.group)) appendChat((0,_helpers__WEBPACK_IMPORTED_MODULE_1__.chatTemplate)(e.data, userID));
+  if (checkUrl(e.data.url.home)) (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.updateChatsCount)('add-one', e.data.id, e.data.url.group);
 }).listen('UserJoinedGroup', function (e) {
   if (checkUrl(e.data.url)) {
     incrementMembersCount();
-    appendChat((0,_helpers__WEBPACK_IMPORTED_MODULE_0__.userJoinedTemplate)(e.data));
-    (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.appendUserToMembersList)(e.data.username);
+    appendChat((0,_helpers__WEBPACK_IMPORTED_MODULE_1__.userJoinedTemplate)(e.data));
+    (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.appendUserToMembersList)(e.data.username);
   }
 
   console.log(e);
-}).listen('ReadChatMessage', function (e) {
-  if (checkUrl(e.data.url)) {
-    (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.updateChatsCount)('reset', e.data.id);
+}).listen('ReadChatMessage', function (e) {// if (checkUrl(e.data.url)) {
+  //     updateChatsCount('reset', e.data.id);
+  // }
+}).listen('ClickedFavorite', function (e) {
+  if (e.data.info == true) {
+    $('.bi-star-fill').css("color", "yellow");
+  } else {
+    $('.bi-star-fill').css("color", "gray");
   }
+
+  console.log(e.data);
 });
 
 /***/ }),
@@ -1968,6 +1962,48 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__.default({
 
 /***/ }),
 
+/***/ "./resources/js/chatHelpers.js":
+/*!*************************************!*\
+  !*** ./resources/js/chatHelpers.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "sendChatData": () => (/* binding */ sendChatData)
+/* harmony export */ });
+function getMessage(id) {
+  return $(id).val();
+}
+
+function zeroOutTextArea(id) {
+  $(id).val('');
+}
+
+var sendChatData = function sendChatData() {
+  var elementId = '.message';
+  var message = getMessage(elementId);
+  var url = window.location.href;
+  var path = window.location.pathname;
+  var groupID = id;
+  var userID = userID; //alert(groupID);
+
+  var data = {
+    message: message,
+    url: url,
+    groupID: groupID,
+    userID: userID
+  };
+  $.post(path, data, function (data) {
+    console.log(data);
+  }); //alert(message);
+
+  zeroOutTextArea(elementId);
+};
+
+/***/ }),
+
 /***/ "./resources/js/helpers.js":
 /*!*********************************!*\
   !*** ./resources/js/helpers.js ***!
@@ -1982,7 +2018,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "appendUserToMembersList": () => (/* binding */ appendUserToMembersList),
 /* harmony export */   "updateChatsCount": () => (/* binding */ updateChatsCount)
 /* harmony export */ });
-var chatTemplate = function chatTemplate(data) {
+var chatTemplate = function chatTemplate(type, data) {
   return "<li class=\"list-group-item d-flex mt-1 sub\">\n            <div class=\"profile-pic rounded-circle me-2 mt-1\"></div>\n            <div class=\"\">\n                <div class=\"fw-bold\">\n                    ".concat(data.username, "\n                    <span class=\"text-muted\">\n                        <i class=\"bi bi-dot\"></i>\n                        <span class=\"time\">").concat(data.time, "</span>\n                    </span>\n                </div>\n                <div class=\"chat-text text-muted\">").concat(data.message, "</div>\n            </div>\n        </li>");
 };
 var userJoinedTemplate = function userJoinedTemplate(data) {
@@ -1991,17 +2027,23 @@ var userJoinedTemplate = function userJoinedTemplate(data) {
 var appendUserToMembersList = function appendUserToMembersList(name) {
   $('#info-members-list').append("<li class=\"list-group-item members-list-item\">\n            <div class=\"d-flex sub align-items-center\">\n                <div class=\"profile-pic rounded-circle me-2\"></div>\n                <div class=\"fw-bold me-3\">".concat(name, "</div>            \n            </div>\n        </li>"));
 };
-var updateChatsCount = function updateChatsCount(info, id) {
-  var element = $('#' + id);
-  var val = Number(element.text());
+var updateChatsCount = function updateChatsCount(info, id, url) {
+  var data = {
+    id: id,
+    url: url
+  };
+  $.post('/updateChatsCount', data, function (data) {
+    var element = $('#' + id);
+    var val = Number(element.text());
 
-  switch (info) {
-    case 'add-one':
-      return element.text(val + 1);
+    switch (info) {
+      case 'add-one':
+        return element.text(val + 1);
 
-    case 'reset':
-      return element.text(90);
-  }
+      case 'reset':
+        return element.text(90);
+    }
+  });
 };
 
 /***/ }),

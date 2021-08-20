@@ -82,6 +82,7 @@
 .group-page-chat-div {
     height: 70vh;
     overflow-y: scroll;
+    background-color: lightgray;
     
 }
 
@@ -98,18 +99,57 @@
     cursor: pointer;
     font-size: inherit;
 }
-
-
-
+ 
 .members-list-item > .sub > .profile-pic {
     width: 10px;
     height: 10px;
     padding: 10px;
     background-color: aliceblue;
+    
+}
+
+.members-list-item {
+    cursor: pointer;
+}
+
+.members-list-item:hover {
+    background-color: lightgray;
+}
+
+#select-dots {
+    visibility: hidden;
 }
 
 .group-chats-count {
     background-color: black;
     padding: 3px 10px;
     font-size: small;    
+}
+
+.unmarked-favorite {
+    color: gray;
+    cursor: pointer;
+}
+
+.marked-favorite {
+    color: yellow;
+    cursor: pointer;
+}
+
+.private-chat-list-item {
+    width: 60%;
+}
+
+.private-chat-list-item-user {
+    margin-left: 40%;
+    width: 60%;    
+}
+
+.chat-list-item {
+    border-radius: 15px;
+}
+
+/* Home blade */
+.drop-item:hover {
+    background-color: beige;
 }

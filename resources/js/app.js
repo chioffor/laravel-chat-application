@@ -1,7 +1,10 @@
 const { toArray } = require('lodash');
-
 require('./bootstrap');
-require('./helpers');
+
+import {
+    sendChatData
+} from './chatHelpers';
+
 import { 
     chatTemplate, 
     userJoinedTemplate, 
@@ -25,36 +28,15 @@ function displayCreateInputDiv() {
     );
 }
 
-function getMessage(id) {
-    return $(id).val();
-}
 
-function zeroOutTextArea(id) {
-    $(id).val('');
-}
+
 
 const incrementMembersCount = () => {
     let val = Number($('#member-count').text());
     $('#member-count').text(val + 1);
 }
 
-function sendChatData() {
-    let elementId = '.message';
-    let message = getMessage(elementId);
-    let url = window.location.href;
-    let groupID = id;
-    //alert(groupID);
-    const data = {
-        message: message,
-        url: url,
-        groupID: groupID,
-    };
-    $.post('/chat-message', data, function(data) {
-        console.log(data);
-    });
-    //alert(message);
-    zeroOutTextArea(elementId);
-}
+
 
 function appendChat(template) {
     $('#chat-message-info-list-item').append(
@@ -76,18 +58,32 @@ $(".create-new-group").on("click", function() {
     displayCreateInputDiv();
 });
 
-$('.send').on("click", function(e) {
+$( ".send" ).on("click", function(e) {
     e.preventDefault();
     sendChatData();
+});
+
+$( ".bi-star-fill" ).on("click", function() {
+    $.post('/favorite', {id: id}, function(data) {
+        console.log('success');
+    });
+    
+});
+
+$( ".members-list-item" ).mouseover(function() {
+    $( this ).find(".select-dots").css('visibility', 'visible');
+});
+$( ".members-list-item" ).mouseleave(function() {
+    $( this ).find(".select-dots").css('visibility', 'hidden');
 });
 
 Echo.private('room')
     .listen('ChatSent', (e) => {
         let url = window.location.href;
         if (checkUrl(e.data.url.group))
-            appendChat(chatTemplate(e.data));
+            appendChat(chatTemplate(e.data, userID));
         if (checkUrl(e.data.url.home))
-            updateChatsCount('add-one', e.data.id);  
+            updateChatsCount('add-one', e.data.id, e.data.url.group);  
     })
     .listen('UserJoinedGroup', (e) => {
         if (checkUrl(e.data.url)) {
@@ -98,8 +94,16 @@ Echo.private('room')
         console.log(e);
     })
     .listen('ReadChatMessage', (e) => {
-        if (checkUrl(e.data.url)) {
-            updateChatsCount('reset', e.data.id);
+        // if (checkUrl(e.data.url)) {
+        //     updateChatsCount('reset', e.data.id);
+        // }
+    })
+    .listen('ClickedFavorite', (e) => {
+        if (e.data.info == true) {
+            $('.bi-star-fill').css("color", "yellow");
+        } else {
+            $('.bi-star-fill').css("color", "gray");
         }
+        console.log(e.data);
     })
 

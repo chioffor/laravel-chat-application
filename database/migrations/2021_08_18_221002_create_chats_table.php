@@ -18,10 +18,12 @@ class CreateChatsTable extends Migration
             $table->text('chat');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('group_id')->nullable();
+            $table->unsignedBigInteger('direct_id')->nullable();
             $table->timestamps();            
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('group_id')->references('id')->on('groups');
+            $table->foreign('direct_id')->references('id')->on('directs');
         });
     }
 

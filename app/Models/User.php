@@ -48,6 +48,27 @@ class User extends Authenticatable
 
     public function groups()
     {
-        return $this->belongsToMany(Group::class, 'group_user', 'user_id', 'group_id')->withPivot('unreadCount');
+        return $this->belongsToMany(Group::class, 'group_user', 'user_id', 'group_id')->withPivot('unreadCount','favorite');
     }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Group::class)->withPivot('unreadCount', 'favorite')->wherePivot('favorite', true);
+    }
+
+    public function activeFavorite($id)
+    {
+        return $this->favorites->firstWhere('id', '=', $id);
+    }
+
+    public function directs()
+    {
+        return $this->belongsToMany(Direct::class)->withPivot('unreadCount', 'favorite');
+    }
+
+    //
+    // public function friends()
+    // {
+    //     return $this->belongsToMany(User::class, 'directs', 'user_id', 'friend_id');
+    // }
 }

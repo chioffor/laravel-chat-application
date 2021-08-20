@@ -16,11 +16,15 @@
                 </div>
             </div>
 
-            <div class="my-auto">
-                <i class="bi bi-star-fill"></i>
+            <div class="my-auto fav">
+                @if ($user->activeFavorite($id))
+                    <i class="bi bi-star-fill marked-favorite" id="marked"></i>
+                @else
+                    <i class="bi bi-star-fill unmarked-favorite" id="unmarked"></i>
+                @endif
             </div>
             <button id="info-button" class="btn h4 my-auto" data-bs-toggle="offcanvas" data-bs-target="#info-canvas">
-                <i class="bi bi-info-circle-fill"></i>
+                <i class="bi bi-info-circle-fill true"></i>
             </button>
             
         </div>
@@ -47,13 +51,18 @@
                             @if ($group->isAdmin($member->id))
                                 <li class="list-group-item members-list-item">
                                     @include('components.profile', [
-                                        'name' => $member->name === $user->name ? 'You' : $member->name, 
-                                        'identity' => 'admin'
+                                        "name" => $member->name === $user->name ? 'You' : $member->name, 
+                                        "identity" => 'admin',
+                                        "id" => $member->id
                                     ])
                                 </li>
                             @else                     
                                 <li class="list-group-item members-list-item">
-                                    @include('components.profile', ['name' => $member->name === $user->name ? 'You' : $member->name])
+                                    @include('components.profile', [
+                                        "name" => $member->name === $user->name ? 'You' : $member->name,
+                                        "id" => $member->id,
+                                        "identity" => '',
+                                    ])
                                 </li>
                             @endif
                         @endforeach
@@ -87,7 +96,7 @@
         </ul>
     </div>
 
-    <div class="group-page-chat-input-div bg-light">
+    <div class="group-page-chat-input-div bg-light mt-2">
         <!-- <form action="{{ url('group/chat/'.$group->id) }}" method="POST"> -->
         <form>
             @csrf
