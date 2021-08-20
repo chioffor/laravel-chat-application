@@ -52,24 +52,7 @@
                     No directs
                 </li>
             @endforelse
-            <!-- <li class="list-group-item btn">
-                <div class="top d-flex justify-content-between">
-                    <div class="d-flex sub align-items-center">
-                        <div class="profile-pic rounded-circle me-2"></div>
-                        <div class="fw-bold">Jerome Boateng</div> 
-                    </div>
-                    <div class="badges">0</div>            
-                </div>
-            </li>
-            <li class="list-group-item btn">
-                <div class="top d-flex justify-content-between">
-                    <div class="d-flex sub align-items-center">
-                        <div class="profile-pic rounded-circle me-2"></div>
-                        <div class="fw-bold">Lionel Osu</div> 
-                    </div>
-                    <div class="badges">1</div>            
-                </div>
-            </li> -->
+            
         </ul>
     </div>
 
@@ -145,5 +128,8 @@
         </div>
 
     </div>
+
+    <script>
+    </script>
 
 @endsection

@@ -10,6 +10,7 @@ import {
     userJoinedTemplate, 
     appendUserToMembersList,
     updateChatsCount,
+    scrollPageTop,
 } from './helpers';
 
 $.ajaxSetup({
@@ -17,6 +18,12 @@ $.ajaxSetup({
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
+
+const chatDiv = $( "#group-page-chat-div" );
+
+if (chatDiv.length) {
+    $(scrollPageTop(chatDiv));
+}
 
 
 function displayCreateInputDiv() {
@@ -42,12 +49,13 @@ function appendChat(template) {
     $('#chat-message-info-list-item').append(
         template
     );
-    scrollPageTop();
+    scrollPageTop(chatDiv);
 }
 
-function scrollPageTop() {
-    $('#group-page-chat-div').scrollTop($('#group-page-chat-div')[0].scrollHeight);
-}
+// function scrollPageTop(elem) {
+//     // $('#group-page-chat-div').scrollTop($('#group-page-chat-div')[0].scrollHeight);
+//     elem.scrollTop(elem)[0].scrollHeight;
+// }
 
 function checkUrl(url) {
     return url === window.location.href;
@@ -81,7 +89,7 @@ Echo.private('room')
     .listen('ChatSent', (e) => {
         let url = window.location.href;
         if (checkUrl(e.data.url.group))
-            appendChat(chatTemplate(e.data, userID));
+            appendChat(chatTemplate(e.data));
         if (checkUrl(e.data.url.home))
             updateChatsCount('add-one', e.data.id, e.data.url.group);  
     })

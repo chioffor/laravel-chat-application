@@ -57,7 +57,7 @@
 }
 
 .chat-text {
-    word-wrap: break-word;
+    overflow-wrap: anywhere;
     width: auto;
     font-size: 14px;
 }
@@ -152,4 +152,23 @@
 /* Home blade */
 .drop-item:hover {
     background-color: beige;
+}
+
+
+/* CHAT DISPLAY */
+
+   /* ## chat message item display */
+.chat-profile-pic {
+    width: 25px;
+    height: 25px;
+    padding: 15px;
+    background-color: darkslateblue;
+}
+.time {
+    font-size: small;
+}
+
+
+.bi-chevron-compact-left {
+    font-size: 30px;
 }

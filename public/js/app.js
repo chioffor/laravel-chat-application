@@ -1856,6 +1856,11 @@ $.ajaxSetup({
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
   }
 });
+var chatDiv = $("#group-page-chat-div");
+
+if (chatDiv.length) {
+  $((0,_helpers__WEBPACK_IMPORTED_MODULE_1__.scrollPageTop)(chatDiv));
+}
 
 function displayCreateInputDiv() {
   $('#group-form').prepend("<div class=\"input-group mb-2 w-50\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Choose a name\" name=\"group-name\">\n            <button type=\"button\" class=\"btn btn-outline-secondary\">submit</button>\n        </div>");
@@ -1868,12 +1873,12 @@ var incrementMembersCount = function incrementMembersCount() {
 
 function appendChat(template) {
   $('#chat-message-info-list-item').append(template);
-  scrollPageTop();
-}
+  (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.scrollPageTop)(chatDiv);
+} // function scrollPageTop(elem) {
+//     // $('#group-page-chat-div').scrollTop($('#group-page-chat-div')[0].scrollHeight);
+//     elem.scrollTop(elem)[0].scrollHeight;
+// }
 
-function scrollPageTop() {
-  $('#group-page-chat-div').scrollTop($('#group-page-chat-div')[0].scrollHeight);
-}
 
 function checkUrl(url) {
   return url === window.location.href;
@@ -1902,7 +1907,7 @@ $(".members-list-item").mouseleave(function () {
 });
 Echo["private"]('room').listen('ChatSent', function (e) {
   var url = window.location.href;
-  if (checkUrl(e.data.url.group)) appendChat((0,_helpers__WEBPACK_IMPORTED_MODULE_1__.chatTemplate)(e.data, userID));
+  if (checkUrl(e.data.url.group)) appendChat((0,_helpers__WEBPACK_IMPORTED_MODULE_1__.chatTemplate)(e.data));
   if (checkUrl(e.data.url.home)) (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.updateChatsCount)('add-one', e.data.id, e.data.url.group);
 }).listen('UserJoinedGroup', function (e) {
   if (checkUrl(e.data.url)) {
@@ -1984,22 +1989,23 @@ function zeroOutTextArea(id) {
 var sendChatData = function sendChatData() {
   var elementId = '.message';
   var message = getMessage(elementId);
-  var url = window.location.href;
-  var path = window.location.pathname;
-  var groupID = id;
-  var userID = userID; //alert(groupID);
 
-  var data = {
-    message: message,
-    url: url,
-    groupID: groupID,
-    userID: userID
-  };
-  $.post(path, data, function (data) {
-    console.log(data);
-  }); //alert(message);
+  if (message != '') {
+    var url = window.location.href;
+    var path = window.location.pathname;
+    var groupID = id;
+    var data = {
+      message: message,
+      url: url,
+      groupID: groupID,
+      userID: userID
+    };
+    $.post(path, data, function (data) {
+      console.log(data);
+    }); //alert(message);
 
-  zeroOutTextArea(elementId);
+    zeroOutTextArea(elementId);
+  }
 };
 
 /***/ }),
@@ -2016,10 +2022,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "chatTemplate": () => (/* binding */ chatTemplate),
 /* harmony export */   "userJoinedTemplate": () => (/* binding */ userJoinedTemplate),
 /* harmony export */   "appendUserToMembersList": () => (/* binding */ appendUserToMembersList),
-/* harmony export */   "updateChatsCount": () => (/* binding */ updateChatsCount)
+/* harmony export */   "updateChatsCount": () => (/* binding */ updateChatsCount),
+/* harmony export */   "scrollPageTop": () => (/* binding */ scrollPageTop)
 /* harmony export */ });
-var chatTemplate = function chatTemplate(type, data) {
-  return "<li class=\"list-group-item d-flex mt-1 sub\">\n            <div class=\"profile-pic rounded-circle me-2 mt-1\"></div>\n            <div class=\"\">\n                <div class=\"fw-bold\">\n                    ".concat(data.username, "\n                    <span class=\"text-muted\">\n                        <i class=\"bi bi-dot\"></i>\n                        <span class=\"time\">").concat(data.time, "</span>\n                    </span>\n                </div>\n                <div class=\"chat-text text-muted\">").concat(data.message, "</div>\n            </div>\n        </li>");
+var chatTemplate = function chatTemplate(data) {
+  // let userID = userID;
+  var chatUserID = data.userID;
+  console.log('chat ID = ' + chatUserID);
+  console.log('USer ID = ' + userID);
+
+  if (userID == chatUserID) {
+    return "<li class=\"list-group-item chat-list-item private-chat-list-item-user d-flex mt-1 sub\">\n                <div class=\"chat-profile-pic rounded-circle me-2 mt-1\"></div>\n                <div class=\"\">\n                    <div class=\"fw-bold\">\n                        <span>You</span>\n                        <span class=\"text-muted\">\n                            <i class=\"bi bi-dot\"></i>\n                            <span class=\"time\">".concat(data.time, "</span>\n                        </span>\n                    </div>\n                    <div class=\"chat-text text-muted\">").concat(data.message, "</div>\n                </div>\n            </li>");
+  } else {
+    return "<li class=\"list-group-item chat-list-item private-chat-list-item d-flex mt-1 sub\">\n                <div class=\"chat-profile-pic rounded-circle me-2 mt-1\"></div>\n                <div class=\"\">\n                    <div class=\"fw-bold\">\n                        <span>".concat(data.username, "</span>\n                        <span class=\"text-muted\">\n                            <i class=\"bi bi-dot\"></i>\n                            <span class=\"time\">").concat(data.time, "</span>\n                        </span>\n                    </div>\n                    <div class=\"chat-text text-muted\">").concat(data.message, "</div>\n                </div>\n            </li>");
+  }
 };
 var userJoinedTemplate = function userJoinedTemplate(data) {
   return "<li class=\"list-group-item\">\n            <div><span class=\"fw-bold\">".concat(data.username, "</span> <span class=\"text-muted\">has joined the group</span></div>\n        </li>");
@@ -2044,6 +2060,10 @@ var updateChatsCount = function updateChatsCount(info, id, url) {
         return element.text(90);
     }
   });
+};
+var scrollPageTop = function scrollPageTop(elem) {
+  //$('#group-page-chat-div').scrollTop($('#group-page-chat-div')[0].scrollHeight);
+  elem.scrollTop(elem[0].scrollHeight);
 };
 
 /***/ }),

@@ -1,19 +1,41 @@
-export const chatTemplate = (type, data) => {
-    return (
-        `<li class="list-group-item d-flex mt-1 sub">
-            <div class="profile-pic rounded-circle me-2 mt-1"></div>
-            <div class="">
-                <div class="fw-bold">
-                    ${data.username}
-                    <span class="text-muted">
-                        <i class="bi bi-dot"></i>
-                        <span class="time">${data.time}</span>
-                    </span>
+export const chatTemplate = (data) => {
+    // let userID = userID;
+    let chatUserID = data.userID;
+    console.log('chat ID = ' + chatUserID);
+    console.log('USer ID = ' + userID);
+    if (userID == chatUserID) {
+        return (
+            `<li class="list-group-item chat-list-item private-chat-list-item-user d-flex mt-1 sub">
+                <div class="chat-profile-pic rounded-circle me-2 mt-1"></div>
+                <div class="">
+                    <div class="fw-bold">
+                        <span>You</span>
+                        <span class="text-muted">
+                            <i class="bi bi-dot"></i>
+                            <span class="time">${data.time}</span>
+                        </span>
+                    </div>
+                    <div class="chat-text text-muted">${data.message}</div>
                 </div>
-                <div class="chat-text text-muted">${data.message}</div>
-            </div>
-        </li>`
-    );
+            </li>`
+        );
+    } else {
+        return (
+            `<li class="list-group-item chat-list-item private-chat-list-item d-flex mt-1 sub">
+                <div class="chat-profile-pic rounded-circle me-2 mt-1"></div>
+                <div class="">
+                    <div class="fw-bold">
+                        <span>${data.username}</span>
+                        <span class="text-muted">
+                            <i class="bi bi-dot"></i>
+                            <span class="time">${data.time}</span>
+                        </span>
+                    </div>
+                    <div class="chat-text text-muted">${data.message}</div>
+                </div>
+            </li>`
+        );
+    }
 }
 
 export const userJoinedTemplate = (data) => {
@@ -52,4 +74,9 @@ export const updateChatsCount = (info, id, url) => {
 
         }
     });    
+}
+
+export const scrollPageTop = (elem) => {
+    //$('#group-page-chat-div').scrollTop($('#group-page-chat-div')[0].scrollHeight);
+    elem.scrollTop(elem[0].scrollHeight);
 }

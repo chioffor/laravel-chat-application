@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\DirectController;
 use App\Models\Chat;
 use App\Models\Group;
 use App\Models\User;
@@ -51,7 +52,7 @@ Route::get('/home', function () {
         "groups" => Group::all(),
         "directs" => $user->directs,
     ]);    
-})->middleware('auth');
+})->middleware('auth')->name('home');
 
 Route::post('/create-group', [GroupController::class, 'store']);
 
@@ -67,8 +68,11 @@ Route::get('/home/{id}', function($id) {
     $g = $user->groups->firstWhere('id', '=', $group->id);
     $g->pivot->unreadCount = 0;
     $g->pivot->save();
-    //event(new ReadChatMessage($data));
-    return view('group', ['group' => $group, 'user' => request()->user()]);
+    return view('group', [
+        'group' => $group, 
+        'user' => request()->user(),
+        'userID' => $user->id,
+    ]);
 })->middleware('auth');
 
 Route::get('/home/join/{groupID}', function ($groupID) {
@@ -93,17 +97,7 @@ Route::get('/home/join/{groupID}', function ($groupID) {
 
 
 Route::post('/group/chat/{groupID}', [ChatController::class, 'store']);
-
-Route::get('event', function () {
-    echo url()->current();
-});
-
-Route::get('listen', function () {
-    return view('listenBroadcast');
-});
-
 Route::post('chat-message', [ChatController::class, 'store']);
-
 Route::post('/favorite', function () {
     $id = request()->input('id');
     $group = Group::find($id);
@@ -129,66 +123,29 @@ Route::post('/favorite', function () {
     event(new ClickedFavorite($data));
 });
 
-Route::get('/home/direct/{id}', function ($id) {
-    $friend = User::find($id);
-    $user = request()->user();
-    foreach ($user->directs as $direct) {
-        if ($direct->users->contains('id', '=', $friend->id)) {
-            return redirect(url('./home/private/'.$direct->id));
-        } else {
-            $newDirect = new Direct;
-            $user->directs()->save($newDirect);
-            $friend->directs()->save($newDirect);
-            return redirect(url('./home/private/'.$newDirect->id));
-        }
-    }    
-});
-
-Route::post('/home/direct/{id}', function ($id) {
-    // $friend = User::find(1);
-    // $user = request()->user();
-    // $message = request()->input('message');
-
-    // $chat = new Chat;
-    // $chat->chat = $message;
-
-    // $user->chats()->save($chat);
-    // $friend->chats()->save($chat); 
-
-});
-
-Route::get('/home/private/{id}', function ($id) {
-    $direct = Direct::find($id);
-    $user_id = request()->user()->id; 
-    $friend = $direct->friend($user_id);
-    return view('direct', [
-        "friend" => $friend, 
-        "id" => $friend->id, 
-        "direct" => $direct,
-        "user" => request()->user(),
-    ]);
-});
+Route::get('/home/direct/{id}', [DirectController::class, 'store']);
+Route::get('/home/private/{id}', [DirectController::class, 'index']);
 
 
 Route::post('/home/private/{id}', [ChatController::class, 'store']);
 Route::post('/home/{id}', [ChatController::class, 'store']);
 Route::post('/updateChatsCount', function() {
-    //$model = null;
     $user = request()->user();
     $id = request()->input('id');
     $url = request()->input('url');
     if ($url === url('/home/'.$id)) {
-        //$model = Group::find($id);
         $g = $user->groups->firstWhere('id', '=', $id);
         $g->pivot->unreadCount++;
         $g->pivot->save();
     } else if ($url === url('/home/private'.$id)) {
-        //$model = Direct::find($id);
         $g = $user->directs->firstWhere('id', '=', $id);
         $g->pivot->unreadCount++;
         $g->pivot->save();
 
     }
 
+});
 
+Route::get("/goHome", function () {
+    return redirect()->route('home');
 });
