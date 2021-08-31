@@ -60,5 +60,5 @@ $ php artisan serve    #On your web browser visit "localhost:8000"
 * App design
 
 ## Status
-As the app is not production-ready :)
+In Progress :)
 

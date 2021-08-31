@@ -45,15 +45,15 @@ class DirectController extends Controller
     public function store(Request $request, $id)
     {
         $friend = User::find($id);
-        $user = request()->user();
+        $user = $request->user();
         foreach ($user->directs as $direct) {
             if ($direct->users->contains('id', '=', $friend->id)) {
-                return redirect(url('./home/private/'.$direct->id));
+                return redirect(url('/home/private/'.$direct->id));
             } else {
                 $newDirect = new Direct;
                 $user->directs()->save($newDirect);
                 $friend->directs()->save($newDirect);
-                return redirect(url('./home/private/'.$newDirect->id));
+                return redirect(url('/home/private/'.$newDirect->id));
             }
         }    
     }

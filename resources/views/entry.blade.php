@@ -23,8 +23,9 @@
     <body class="antialiased">
         <form method="POST" action="/entry">
             @csrf
-            <div class="position-absolute top-50 start-50 translate-middle">
+            <div class="position-absolute top-50 start-50 translate-middle d-flex">
                 <input type="text" class="form-control bg-light shadow" name="name" placeholder="Choose a name...">
+                <input type="submit" class="btn btn-secondary border" value="Enter">
             </div>
         </form>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

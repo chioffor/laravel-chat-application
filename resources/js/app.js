@@ -30,7 +30,7 @@ function displayCreateInputDiv() {
     $('#group-form').prepend(
         `<div class="input-group mb-2 w-50">
             <input type="text" class="form-control" placeholder="Choose a name" name="group-name">
-            <button type="button" class="btn btn-outline-secondary">submit</button>
+            <input type="submit" class="btn btn-outline-secondary" value="Submit">
         </div>`
     );
 }
@@ -51,11 +51,6 @@ function appendChat(template) {
     );
     scrollPageTop(chatDiv);
 }
-
-// function scrollPageTop(elem) {
-//     // $('#group-page-chat-div').scrollTop($('#group-page-chat-div')[0].scrollHeight);
-//     elem.scrollTop(elem)[0].scrollHeight;
-// }
 
 function checkUrl(url) {
     return url === window.location.href;

@@ -51,7 +51,13 @@ export const appendUserToMembersList = (name) => {
         `<li class="list-group-item members-list-item">
             <div class="d-flex sub align-items-center">
                 <div class="profile-pic rounded-circle me-2"></div>
-                <div class="fw-bold me-3">${name }</div>            
+                <div class="fw-bold me-3">${name }</div>  
+                <div class="dropdown">
+                    <button class="select-dots btn" id="select-dots" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
+                    <ul class="dropdown-menu bg-light">
+                        <li class="dropdown-item"><a class="" href="/home/direct/">Direct Message</a></li>
+                    </ul>
+                </div>         
             </div>
         </li>`
     )

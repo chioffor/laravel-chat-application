@@ -1863,7 +1863,7 @@ if (chatDiv.length) {
 }
 
 function displayCreateInputDiv() {
-  $('#group-form').prepend("<div class=\"input-group mb-2 w-50\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Choose a name\" name=\"group-name\">\n            <button type=\"button\" class=\"btn btn-outline-secondary\">submit</button>\n        </div>");
+  $('#group-form').prepend("<div class=\"input-group mb-2 w-50\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Choose a name\" name=\"group-name\">\n            <input type=\"submit\" class=\"btn btn-outline-secondary\" value=\"Submit\">\n        </div>");
 }
 
 var incrementMembersCount = function incrementMembersCount() {
@@ -1874,11 +1874,7 @@ var incrementMembersCount = function incrementMembersCount() {
 function appendChat(template) {
   $('#chat-message-info-list-item').append(template);
   (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.scrollPageTop)(chatDiv);
-} // function scrollPageTop(elem) {
-//     // $('#group-page-chat-div').scrollTop($('#group-page-chat-div')[0].scrollHeight);
-//     elem.scrollTop(elem)[0].scrollHeight;
-// }
-
+}
 
 function checkUrl(url) {
   return url === window.location.href;
@@ -2041,7 +2037,7 @@ var userJoinedTemplate = function userJoinedTemplate(data) {
   return "<li class=\"list-group-item\">\n            <div><span class=\"fw-bold\">".concat(data.username, "</span> <span class=\"text-muted\">has joined the group</span></div>\n        </li>");
 };
 var appendUserToMembersList = function appendUserToMembersList(name) {
-  $('#info-members-list').append("<li class=\"list-group-item members-list-item\">\n            <div class=\"d-flex sub align-items-center\">\n                <div class=\"profile-pic rounded-circle me-2\"></div>\n                <div class=\"fw-bold me-3\">".concat(name, "</div>            \n            </div>\n        </li>"));
+  $('#info-members-list').append("<li class=\"list-group-item members-list-item\">\n            <div class=\"d-flex sub align-items-center\">\n                <div class=\"profile-pic rounded-circle me-2\"></div>\n                <div class=\"fw-bold me-3\">".concat(name, "</div>  \n                <div class=\"dropdown\">\n                    <button class=\"select-dots btn\" id=\"select-dots\" data-bs-toggle=\"dropdown\"><i class=\"bi bi-three-dots-vertical\"></i></button>\n                    <ul class=\"dropdown-menu bg-light\">\n                        <li class=\"dropdown-item\"><a class=\"\" href=\"{{ url('/home/direct/'.$id) }}\">Direct Message</a></li>\n                    </ul>\n                </div>         \n            </div>\n        </li>"));
 };
 var updateChatsCount = function updateChatsCount(info, id, url) {
   var data = {

@@ -1,7 +1,5 @@
 services:
-  web:
-    # build:
-    #   context: .
+  web:    
     image: chioffor/app:latest
     container_name: main
     ports: 
@@ -10,7 +8,9 @@ services:
     
     depends_on:
       - db
-    
+    volumes:
+      - .:/app       
+
   db:
     image: mysql
     environment:
@@ -18,3 +18,4 @@ services:
       MYSQL_DATABASE: app
       MYSQL_USER: username
       MYSQL_PASSWORD: password
+

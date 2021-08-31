@@ -37,16 +37,16 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $user = $request->user();
+        if ($request->input('group-name')) {
+            $name = $request->input('group-name');
+            $group = new Group;
+            $group->name = $name;
+            $user->groups()->save($group);
+            return redirect(url('/home/'.$group->id));
+        } else {
+            return redirect('/home');
+        }
 
-        $name = $request->input('group-name');
-        $group = new Group;
-        $group->name = $name;
-
-        $user->groups()->save($group);
-        //$group->users()->save($user);
-
-        return redirect(url('/home/'.$group->id));
-        
 
     }
 

@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MemberController;
+// use App\Http\Controllers\MemberController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DirectController;
+use App\Http\Controllers\UserController;
 use App\Models\Chat;
 use App\Models\Group;
 use App\Models\User;
@@ -36,14 +37,7 @@ Route::get('/', function () {
     } 
 })->name('login');
 
-Route::post('/entry', function () {
-    $user = new User;
-    $user->name = request()->input('name');
-    $user->password = uniqid("user", true);
-    $user->save();
-    Auth::login($user, $remember = true);
-    return redirect('/home');
-});
+Route::post('/entry', [UserController::class, 'store']);    
 
 Route::get('/home', function () { 
     $user = request()->user();   

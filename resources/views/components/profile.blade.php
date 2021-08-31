@@ -10,7 +10,7 @@
             @if ($name !== 'You')
                 <li class="dropdown-item"><a class="" href="{{ url('/home/direct/'.$id) }}">Direct Message</a></li>
             @else
-                <li class="dropdown-item"><a class="#" href="">slap</a></li>
+                <li class="dropdown-item"><a class="#" href="">You</a></li>
             @endif
         </ul>
     </div>
