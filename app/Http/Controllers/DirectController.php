@@ -46,16 +46,24 @@ class DirectController extends Controller
     {
         $friend = User::find($id);
         $user = $request->user();
-        foreach ($user->directs as $direct) {
-            if ($direct->users->contains('id', '=', $friend->id)) {
-                return redirect(url('/home/private/'.$direct->id));
-            } else {
-                $newDirect = new Direct;
-                $user->directs()->save($newDirect);
-                $friend->directs()->save($newDirect);
-                return redirect(url('/home/private/'.$newDirect->id));
-            }
-        }    
+        if ($user->directs->count() > 0) {
+            foreach ($user->directs as $direct) {
+                if ($direct->users->contains('id', '=', $friend->id)) {
+                    return redirect(url('/home/private/'.$direct->id));
+                } else {
+                    $newDirect = new Direct;
+                    $user->directs()->save($newDirect);
+                    $friend->directs()->save($newDirect);
+                    return redirect(url('/home/private/'.$newDirect->id));
+                }
+            }    
+        } else {
+            $newDirect = new Direct;
+            $user->directs()->save($newDirect);
+            $friend->directs()->save($newDirect);
+            return redirect(url('/home/private/'.$newDirect->id));
+        }
+        
     }
 
     /**

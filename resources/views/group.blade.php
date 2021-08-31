@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="group-page-top p-2">
-        <div class="h4 d-flex"> 
+        <div class="h5 d-flex"> 
             <div class="me-2">#</div>
             <div class="flex-grow-1">
                 <div>{{ $group->name }}</div>
@@ -26,6 +26,7 @@
             <button id="info-button" class="btn h4 my-auto" data-bs-toggle="offcanvas" data-bs-target="#info-canvas">
                 <i class="bi bi-info-circle-fill true"></i>
             </button>
+            <div class="me-2 fw-bold my-auto"><a href="/goHome">HOME</a></div>
             
         </div>
     </div>
