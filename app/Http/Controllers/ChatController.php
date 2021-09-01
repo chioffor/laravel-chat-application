@@ -57,7 +57,7 @@ class ChatController extends Controller
         $model = null;
         $chatType = null;
 
-        if ($url == url('/home/'.$id)) {
+        if ($url == url('/home/group/'.$id)) {
             $model = $this->getGroup($id);
             $chatType = 'group';
         } else if ($url == url('/home/private/'.$id)) {

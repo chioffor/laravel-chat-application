@@ -3,16 +3,18 @@
 use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\MemberController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\GroupUserController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DirectController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserChatController;
 use App\Models\Chat;
 use App\Models\Group;
 use App\Models\User;
 use App\Models\Direct;
 
 use App\Events\ChatSent;
-use App\Events\UserJoinedGroup;
+// use App\Events\UserJoinedGroup;
 use App\Events\ReadChatMessage;
 use App\Events\ClickedFavorite;
 
@@ -50,95 +52,44 @@ Route::get('/home', function () {
 
 Route::post('/create-group', [GroupController::class, 'store']);
 
-Route::get('/home/{id}', function($id) {
-    $group = Group::find($id);
+Route::get('/home/group/{id}', [GroupController::class, 'show'])
+    ->middleware('auth')
+    ->name('group-page');
 
-    $data = [
-        'url' => url('/home'),
-        'id' => $id,
-    ];
+Route::get('/home/join/{groupID}', [GroupUserController::class, 'edit'])
+    ->middleware('auth')
+    ->name('join-group');
 
-    $user = request()->user();
-    $g = $user->groups->firstWhere('id', '=', $group->id);
-    $g->pivot->unreadCount = 0;
-    $g->pivot->save();
-    return view('group', [
-        'group' => $group, 
-        'user' => request()->user(),
-        'userID' => $user->id,
-    ]);
-})->middleware('auth');
-
-Route::get('/home/join/{groupID}', function ($groupID) {
-    if (!Auth::check())
-        return redirect('/');
-
-    $user = request()->user();    
-    $group = Group::find($groupID);
-    $user->groups()->save($group);
-
-    $url = url("/home/{$groupID}");
-    $username = $user->name;
-    $data = [
-        'url' => $url,
-        'username' => $username,
-    ];
-
-    event(new UserJoinedGroup($data));
-
-    return redirect(url('/home/'.$group->id));
-})->middleware('auth');
-
+Route::get('/home/leave/{groupID}', [GroupUserController::class, 'edit'])
+    ->middleware('auth')
+    ->name('leave-group');
 
 Route::post('/group/chat/{groupID}', [ChatController::class, 'store']);
 Route::post('chat-message', [ChatController::class, 'store']);
-Route::post('/favorite', function () {
-    $id = request()->input('id');
-    $group = Group::find($id);
-    $user = request()->user();
-
-    $info = false;
-
-    $g = $user->groups->firstWhere('id', '=', $id);
-    if ($g->pivot->favorite == true) {
-        $g->pivot->favorite = false;
-        $g->pivot->save();
-        $info = false;
-    } else {
-        $g->pivot->favorite = true;
-        $g->pivot->save();
-        $info = true;
-    }
-
-    $data = [
-        'id' => $id,
-        'info' => $info,
-    ];
-    event(new ClickedFavorite($data));
-});
-
+Route::get('/favorite/{groupID}', [GroupUserController::class, 'update'])
+    ->name('favorite');    
 Route::get('/home/direct/{id}', [DirectController::class, 'store']);
-Route::get('/home/private/{id}', [DirectController::class, 'index']);
-
-
+Route::get('/home/private/{id}', [DirectController::class, 'index'])
+    ->middleware('auth')
+    ->name('private-page');
 Route::post('/home/private/{id}', [ChatController::class, 'store']);
-Route::post('/home/{id}', [ChatController::class, 'store']);
-Route::post('/updateChatsCount', function() {
-    $user = request()->user();
-    $id = request()->input('id');
-    $url = request()->input('url');
-    if ($url === url('/home/'.$id)) {
-        $g = $user->groups->firstWhere('id', '=', $id);
-        $g->pivot->unreadCount++;
-        $g->pivot->save();
-    } else if ($url === url('/home/private'.$id)) {
-        $g = $user->directs->firstWhere('id', '=', $id);
-        $g->pivot->unreadCount++;
-        $g->pivot->save();
+Route::post('/home/group/{id}', [ChatController::class, 'store']);
+Route::get('/updateChatsCount/{id}', [UserChatController::class, 'update']);
+    // $user = request()->user();
+    // // $id = request()->input('id');
+    // $url = request()->input('url');
+    // if ($url === route('group-page', ["id" => $id])) {
+    //     $g = $user->groups->firstWhere('id', '=', $id);
+    //     $g->pivot->unreadCount++;
+    //     $g->pivot->save();
+    // } else if ($url === route('private-page', ["id" => $id])) {
+    //     $g = $user->directs->firstWhere('id', '=', $id);
+    //     $g->pivot->unreadCount++;
+    //     $g->pivot->save();
 
-    }
+    // }
 
-});
+
 
 Route::get("/goHome", function () {
     return redirect()->route('home');

@@ -81,10 +81,10 @@
                     <div><i class="bi bi-plus"></i></div>
                 </div>                                          
                     
-                <ul class="list-group collapse" id="your-groups">
+                <ul class="list-group collapse show" id="your-groups">
                     @forelse ($user->groups as $group)
                         @if ($group->users->contains('id', '=', $user->id))                  
-                            <a class="list-group-item" href="{{ url('/home/'.$group->id) }}">
+                            <a class="list-group-item" href="{{ url('/home/group/'.$group->id) }}">
                                 <div class="group-item d-flex justify-content-between">
                                     <div class="fw-bold"># {{ $group->name }}</div>
                                     <div class="text-white group-chats-count" id="<?php echo $group->id; ?>">{{ $group->pivot->unreadCount }}</div>

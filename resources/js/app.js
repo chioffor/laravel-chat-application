@@ -7,8 +7,10 @@ import {
 
 import { 
     chatTemplate, 
-    userJoinedTemplate, 
+    userJoinedTemplate,
+    userLeftTemplate,
     appendUserToMembersList,
+    removeUserFromMembersList,
     updateChatsCount,
     scrollPageTop,
 } from './helpers';
@@ -43,6 +45,11 @@ const incrementMembersCount = () => {
     $('#member-count').text(val + 1);
 }
 
+const decrementMembersCount = () => {
+    let val = Number($('#member-count').text());
+    $('#member-count').text(val - 1);
+}
+
 
 
 function appendChat(template) {
@@ -67,7 +74,7 @@ $( ".send" ).on("click", function(e) {
 });
 
 $( ".bi-star-fill" ).on("click", function() {
-    $.post('/favorite', {id: id}, function(data) {
+    $.get(`/favorite/${id}`, function(data) {
         console.log('success');
     });
     
@@ -76,6 +83,7 @@ $( ".bi-star-fill" ).on("click", function() {
 $( ".members-list-item" ).mouseover(function() {
     $( this ).find(".select-dots").css('visibility', 'visible');
 });
+
 $( ".members-list-item" ).mouseleave(function() {
     $( this ).find(".select-dots").css('visibility', 'hidden');
 });
@@ -92,14 +100,15 @@ Echo.private('room')
         if (checkUrl(e.data.url)) {
             incrementMembersCount();
             appendChat(userJoinedTemplate(e.data));
-            appendUserToMembersList(e.data.username);
+            appendUserToMembersList(e.data.username, e.data.id);
         }
         console.log(e);
     })
-    .listen('ReadChatMessage', (e) => {
-        // if (checkUrl(e.data.url)) {
-        //     updateChatsCount('reset', e.data.id);
-        // }
+    .listen('UserLeftGroup', (e) => {
+        if (checkUrl(e.data.url)) 
+            appendChat(userLeftTemplate(e.data.username));
+            decrementMembersCount();
+            removeUserFromMembersList(e.data.id);
     })
     .listen('ClickedFavorite', (e) => {
         if (e.data.info == true) {

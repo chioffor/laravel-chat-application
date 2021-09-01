@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\Event;
 use App\Events\ClickedFavorite;
 use App\Events\ChatSent;
 use App\Events\UserJoinedGroup;
+use App\Events\UserLeftGroup;
 use App\Events\ReadChatMessage;
 use App\Listeners\SendToGroupMembers;
 use App\Listeners\UpdateFavorites;
 use App\Listeners\NotifyGroupMembers;
+use App\Listeners\NotifyLeftGroupMembers;
 use App\Listeners\ResetChatCount;
 
 class EventServiceProvider extends ServiceProvider
@@ -32,6 +34,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserJoinedGroup::class => [
             NotifyGroupMembers::class,
+        ],
+        UserLeftGroup::class => [
+            NotifyLeftGroupMembers::class,
         ],
         ReadChatMessage::class => [
             ResetChatCount::class,

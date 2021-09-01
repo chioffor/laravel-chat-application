@@ -1871,6 +1871,11 @@ var incrementMembersCount = function incrementMembersCount() {
   $('#member-count').text(val + 1);
 };
 
+var decrementMembersCount = function decrementMembersCount() {
+  var val = Number($('#member-count').text());
+  $('#member-count').text(val - 1);
+};
+
 function appendChat(template) {
   $('#chat-message-info-list-item').append(template);
   (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.scrollPageTop)(chatDiv);
@@ -1889,9 +1894,7 @@ $(".send").on("click", function (e) {
   (0,_chatHelpers__WEBPACK_IMPORTED_MODULE_0__.sendChatData)();
 });
 $(".bi-star-fill").on("click", function () {
-  $.post('/favorite', {
-    id: id
-  }, function (data) {
+  $.get("/favorite/".concat(id), function (data) {
     console.log('success');
   });
 });
@@ -1909,13 +1912,14 @@ Echo["private"]('room').listen('ChatSent', function (e) {
   if (checkUrl(e.data.url)) {
     incrementMembersCount();
     appendChat((0,_helpers__WEBPACK_IMPORTED_MODULE_1__.userJoinedTemplate)(e.data));
-    (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.appendUserToMembersList)(e.data.username);
+    (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.appendUserToMembersList)(e.data.username, e.data.id);
   }
 
   console.log(e);
-}).listen('ReadChatMessage', function (e) {// if (checkUrl(e.data.url)) {
-  //     updateChatsCount('reset', e.data.id);
-  // }
+}).listen('UserLeftGroup', function (e) {
+  if (checkUrl(e.data.url)) appendChat((0,_helpers__WEBPACK_IMPORTED_MODULE_1__.userLeftTemplate)(e.data.username));
+  decrementMembersCount();
+  (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.removeUserFromMembersList)(e.data.id);
 }).listen('ClickedFavorite', function (e) {
   if (e.data.info == true) {
     $('.bi-star-fill').css("color", "yellow");
@@ -2017,7 +2021,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "chatTemplate": () => (/* binding */ chatTemplate),
 /* harmony export */   "userJoinedTemplate": () => (/* binding */ userJoinedTemplate),
+/* harmony export */   "userLeftTemplate": () => (/* binding */ userLeftTemplate),
 /* harmony export */   "appendUserToMembersList": () => (/* binding */ appendUserToMembersList),
+/* harmony export */   "removeUserFromMembersList": () => (/* binding */ removeUserFromMembersList),
 /* harmony export */   "updateChatsCount": () => (/* binding */ updateChatsCount),
 /* harmony export */   "scrollPageTop": () => (/* binding */ scrollPageTop)
 /* harmony export */ });
@@ -2036,15 +2042,22 @@ var chatTemplate = function chatTemplate(data) {
 var userJoinedTemplate = function userJoinedTemplate(data) {
   return "<li class=\"list-group-item\">\n            <div><span class=\"fw-bold\">".concat(data.username, "</span> <span class=\"text-muted\">has joined the group</span></div>\n        </li>");
 };
-var appendUserToMembersList = function appendUserToMembersList(name) {
-  $('#info-members-list').append("<li class=\"list-group-item members-list-item\">\n            <div class=\"d-flex sub align-items-center\">\n                <div class=\"profile-pic rounded-circle me-2\"></div>\n                <div class=\"fw-bold me-3\">".concat(name, "</div>  \n                <div class=\"dropdown\">\n                    <button class=\"select-dots btn\" id=\"select-dots\" data-bs-toggle=\"dropdown\"><i class=\"bi bi-three-dots-vertical\"></i></button>\n                    <ul class=\"dropdown-menu bg-light\">\n                        <li class=\"dropdown-item\"><a class=\"\" href=\"{{ url('/home/direct/'.$id) }}\">Direct Message</a></li>\n                    </ul>\n                </div>         \n            </div>\n        </li>"));
+var userLeftTemplate = function userLeftTemplate(username) {
+  return "<li class=\"list-group-item\">\n            <div><span class=\"fw-bold\">".concat(username, "</span> <span class=\"text-muted\">has left the group</span></div>\n        </li>");
+};
+var appendUserToMembersList = function appendUserToMembersList(name, id) {
+  $('#info-members-list').append("<li class=\"list-group-item members-list-item\" id=\"".concat(id, "\">\n            <div class=\"d-flex sub align-items-center\">\n                <div class=\"profile-pic rounded-circle me-2\"></div>\n                <div class=\"fw-bold me-3 flex-grow-1\">").concat(name, "</div>  \n                <div class=\"dropdown\">\n                    <button class=\"select-dots btn\" id=\"\" data-bs-toggle=\"dropdown\"><i class=\"bi bi-three-dots-vertical\"></i></button>\n                    <ul class=\"dropdown-menu bg-light\">\n                        <li class=\"dropdown-item\"><a class=\"\" href=\"#\">Direct Message</a></li>\n                    </ul>\n                </div>         \n            </div>\n        </li>"));
+};
+var removeUserFromMembersList = function removeUserFromMembersList(id) {
+  $("#".concat(id)).remove();
 };
 var updateChatsCount = function updateChatsCount(info, id, url) {
-  var data = {
-    id: id,
+  // const data = {
+  //     url: url,
+  // };
+  $.get("/updateChatsCount/".concat(id), {
     url: url
-  };
-  $.post('/updateChatsCount', data, function (data) {
+  }, function (data) {
     var element = $('#' + id);
     var val = Number(element.text());
 
@@ -2053,7 +2066,7 @@ var updateChatsCount = function updateChatsCount(info, id, url) {
         return element.text(val + 1);
 
       case 'reset':
-        return element.text(90);
+        return element.text(0);
     }
   });
 };

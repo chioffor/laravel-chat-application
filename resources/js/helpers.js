@@ -46,16 +46,24 @@ export const userJoinedTemplate = (data) => {
     )
 }
 
-export const appendUserToMembersList = (name) => {
+export const userLeftTemplate = (username) => {
+    return (
+        `<li class="list-group-item">
+            <div><span class="fw-bold">${username}</span> <span class="text-muted">has left the group</span></div>
+        </li>`
+    )
+}
+
+export const appendUserToMembersList = (name, id) => {
     $('#info-members-list').append(
-        `<li class="list-group-item members-list-item">
+        `<li class="list-group-item members-list-item" id="${id}">
             <div class="d-flex sub align-items-center">
                 <div class="profile-pic rounded-circle me-2"></div>
-                <div class="fw-bold me-3">${name }</div>  
+                <div class="fw-bold me-3 flex-grow-1">${name}</div>  
                 <div class="dropdown">
-                    <button class="select-dots btn" id="select-dots" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
+                    <button class="select-dots btn" id="" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
                     <ul class="dropdown-menu bg-light">
-                        <li class="dropdown-item"><a class="" href="/home/direct/">Direct Message</a></li>
+                        <li class="dropdown-item"><a class="" href="#">Direct Message</a></li>
                     </ul>
                 </div>         
             </div>
@@ -63,20 +71,23 @@ export const appendUserToMembersList = (name) => {
     )
 }
 
-export const updateChatsCount = (info, id, url) => {
-    const data = {
-        id: id,
-        url: url,
-    };
+export const removeUserFromMembersList = (id) => {
+    $(`#${id}`).remove();    
+}
 
-    $.post('/updateChatsCount', data, function(data) {
+export const updateChatsCount = (info, id, url) => {
+    // const data = {
+    //     url: url,
+    // };
+
+    $.get(`/updateChatsCount/${id}`, {url: url}, function(data) {
         let element = $('#' + id);
         let val = Number(element.text());
         switch(info) {
             case 'add-one':
                 return element.text(val + 1);
             case 'reset':
-                return element.text(90);
+                return element.text(0);
 
         }
     });    

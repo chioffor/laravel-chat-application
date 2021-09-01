@@ -42,7 +42,7 @@ class GroupController extends Controller
             $group = new Group;
             $group->name = $name;
             $user->groups()->save($group);
-            return redirect(url('/home/'.$group->id));
+            return redirect(route('group-page', ["id" => $group->id]));
         } else {
             return redirect('/home');
         }
@@ -56,9 +56,24 @@ class GroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $group = Group::find($id);
+
+        $data = [
+            'url' => url('/home'),
+            'id' => $id,
+        ];
+
+        $user = $request->user();
+        $g = $user->groups->firstWhere('id', '=', $group->id);
+        $g->pivot->unreadCount = 0;
+        $g->pivot->save();
+        return view('group', [
+            'group' => $group, 
+            'user' => $request->user(),
+            'userID' => $user->id,
+        ]);
     }
 
     /**

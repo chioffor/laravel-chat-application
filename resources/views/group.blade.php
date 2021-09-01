@@ -50,7 +50,7 @@
                     <ul class="list-group" id="info-members-list">
                         @foreach ($group->users->all() as $member)
                             @if ($group->isAdmin($member->id))
-                                <li class="list-group-item members-list-item">
+                                <li class="list-group-item members-list-item" id="<?php echo $member->id; ?>">
                                     @include('components.profile', [
                                         "name" => $member->name === $user->name ? 'You' : $member->name, 
                                         "identity" => 'admin',
@@ -58,7 +58,7 @@
                                     ])
                                 </li>
                             @else                     
-                                <li class="list-group-item members-list-item">
+                                <li class="list-group-item members-list-item" id="<?php echo $member->id; ?>">
                                     @include('components.profile', [
                                         "name" => $member->name === $user->name ? 'You' : $member->name,
                                         "id" => $member->id,
