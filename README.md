@@ -44,9 +44,10 @@ On your web browser visit "localhost:8000"
 Or via composer:
 ```
 $ git clone https://github.com/chioffor/chat-group-app.git`
-$ cd chat-group-app
-$ composer install
+$ cd chat-group-app$ 
 $ cp .env.example .env    #update environment variables in .env file - database, pusher, broadcast_driver, etc
+$ composer install
+$ npm install && npm run dev
 $ php artisan key:generate
 $ php artisan migrate
 $ php artisan serve    #On your web browser visit "localhost:8000"
