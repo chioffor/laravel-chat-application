@@ -15,15 +15,7 @@ class DirectController extends Controller
      */
     public function index($id)
     {
-        $direct = Direct::find($id);
-        $user_id = request()->user()->id; 
-        $friend = $direct->friend($user_id);
-        return view('direct', [
-            "friend" => $friend, 
-            "id" => $friend->id, 
-            "direct" => $direct,
-            "userID" => $user_id,
-        ]);        
+        
     }
 
     /**
@@ -74,7 +66,18 @@ class DirectController extends Controller
      */
     public function show($id)
     {
-        //
+        $direct = Direct::find($id);
+        $user = request()->user(); 
+        $friend = $direct->friend($user->id);
+        $obj = $user->directs->firstWhere('id', '=', $id);
+        $obj->pivot->unreadCount = 0;
+        $obj->pivot->save();
+        return view('direct', [
+            "friend" => $friend, 
+            "id" => $friend->id, 
+            "direct" => $direct,
+            "userID" => $user->id,
+        ]);        
     }
 
     /**
