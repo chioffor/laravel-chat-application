@@ -14,11 +14,11 @@ export const sendChatData = () => {
     if (message != '') {
         let url = window.location.href;
         let path = window.location.pathname;
-        let groupID = id;
+        //let id = id;
         const data = {
             message: message,
             url: url,
-            groupID: groupID,
+            id: id,
             userID: userID,
         };
         $.post(path, data, function(data) {

@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Events\UserLeftGroup;
+use App\Events\NewUserJoined;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class NotifyLeftGroupMembers
+class UpdateNewUserJoined
 {
     /**
      * Create the event listener.
@@ -21,10 +21,10 @@ class NotifyLeftGroupMembers
     /**
      * Handle the event.
      *
-     * @param  UserLeftGroup  $event
+     * @param  NewUserJoined  $event
      * @return void
      */
-    public function handle(UserLeftGroup $event)
+    public function handle(NewUserJoined $event)
     {
         //
     }

@@ -18,16 +18,29 @@
             body {
                 font-family: 'Nunito', sans-serif;
             }
+            @media (max-width: 900px)  {
+                .container-fluid {
+                    width: 100vw;                    
+                }
+            }
+
+            @media screen and (min-width: 900px) { 
+                .container-fluid {
+                    width: 50vw;
+                }
+            }
         </style>
     </head>
     <body class="antialiased">
-        <form method="POST" action="/entry">
-            @csrf
-            <div class="position-absolute top-50 start-50 translate-middle d-flex">
-                <input type="text" class="form-control bg-light shadow" name="name" placeholder="Choose a name...">
-                <input type="submit" class="btn btn-secondary border" value="Enter">
-            </div>
-        </form>
+        <div class="container-fluid position-absolute top-50 start-50 translate-middle" id="entry">
+            <form method="POST" action="/entry">
+                @csrf
+                <div class="d-flex">
+                    <input type="text" class="form-control bg-light shadow" name="name" placeholder="Choose a name...">
+                    <input type="submit" class="btn btn-secondary border" value="Enter">
+                </div>
+            </form>
+        </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    </body>
+</body>
 </html>

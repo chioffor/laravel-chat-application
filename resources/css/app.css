@@ -4,6 +4,18 @@
     background-color: brown;
 }
 
+/* SOON */
+input[type="file"] {
+    display: none;
+}
+
+/* .file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+} */
+
 .favorites {
     font-size: small;
     font-weight: bold;
@@ -24,19 +36,10 @@
     cursor: pointer;
 }
 
-/* .list-group-item:hover {
-    background-color: darkgrey;
-} */
-
 .create-new-group:hover {
     background-color: lightgrey;
     padding: 5px 10px;
 }
-
-/* .container {
-    height: 100vh;
-    overflow: auto;
-} */
 
 .others, .yours {
     padding: 4px 10px 10px 15px;
@@ -62,11 +65,18 @@
     font-size: 14px;
 }
 
-@media (max-width: 900px)  {
+@media screen and (max-width: 900px)  {
     .container-fluid {
         width: 100vw;
         height: 100vh;
         
+    }
+    .chat-list-item-user {
+        margin-left: 20%;
+        /* width: 80%;         */
+    }
+    .chat-list-item, .chat-list-item-user {
+        width: 80%;
     }
 }
 
@@ -77,24 +87,31 @@
       overflow: auto;
       margin-bottom: 0;
     }
+    .chat-list-item, .chat-list-item-user {
+        width: 60%;        
+    }
+    
+    .chat-list-item-user {
+        margin-left: 40%;
+        /* width: 60%; */
+    }   
+    
 }
 
 .group-page-chat-div {
     height: 70vh;
     overflow-y: scroll;
-    background-color: lightgray;
     
-}
-
-.group-page-chat-input-div {
-    padding: 10px 40px;
-    border: none;    
 }
 
 .form-control:focus {
     box-shadow: none;
 }
 
+.just-joined {
+    font-size: 12px;
+    font-style: italic;
+}
 #info-button {
     cursor: pointer;
     font-size: inherit;
@@ -125,49 +142,59 @@
     font-size: small;    
 }
 
-.unmarked-favorite {
-    color: gray;
-    cursor: pointer;
-}
-
-.marked-favorite {
-    color: yellow;
-    cursor: pointer;
-}
-
-.private-chat-list-item {
-    width: 60%;
-}
-
-.private-chat-list-item-user {
-    margin-left: 40%;
-    width: 60%;    
-}
-
-.chat-list-item {
+.chat-list-item, .chat-list-item-user {
+    padding: 2px 4px;
     border-radius: 15px;
 }
 
-/* Home blade */
-.drop-item:hover {
-    background-color: beige;
+.chat-list-item {
+    background-color: #f8f8f8;
 }
 
+.chat-list-item-user {
+    background-color: #add8e6;
+}
 
-/* CHAT DISPLAY */
-
-   /* ## chat message item display */
-.chat-profile-pic {
+.circle {
     width: 25px;
     height: 25px;
-    padding: 15px;
-    background-color: darkslateblue;
-}
-.time {
-    font-size: small;
+    border-radius: 50%;
+    padding: 5px 12px;
+    background-color: lightgray;
+    font-size: 20px;
 }
 
+
+.time {
+    font-size: 12px;
+}
+.chat-username {
+    font-size: 13px;
+}
 
 .bi-chevron-compact-left {
     font-size: 30px;
 }
+
+.emoji-dropleft {
+    position: relative;
+    display: inline-block;
+}
+.emoji-dropleft-content {
+    display: none;
+    position: absolute;
+    bottom: 50px;
+    right: 1px;
+    max-width: 75vw;
+    padding: 5px;    
+    z-index: 1;
+}
+
+.emoji-category, .emoji-selected {
+    cursor: pointer;
+}
+
+/* CHAT DISPLAY */
+
+   /* ## chat message item display */
+   

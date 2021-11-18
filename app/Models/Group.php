@@ -16,7 +16,7 @@ class Group extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'group_user', 'group_id', 'user_id')->withPivot('unreadCount');
+        return $this->belongsToMany(User::class, 'group_user', 'group_id', 'user_id');
     }
 
     public function chats()

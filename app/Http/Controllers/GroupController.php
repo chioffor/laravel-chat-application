@@ -70,9 +70,10 @@ class GroupController extends Controller
         $g->pivot->unreadCount = 0;
         $g->pivot->save();
         return view('group', [
-            'group' => $group, 
-            'user' => $request->user(),
-            'userID' => $user->id,
+            "group" => $group,
+            "groups" => Group::all(),
+            "user" => $request->user(),
+            "userID" => $user->id,
         ]);
     }
 

@@ -41,8 +41,8 @@ class UserController extends Controller
             $user->name = $request->input('name');
             $user->password = uniqid("user", true);
             $user->save();
-            Auth::login($user, $remember = true);
-            return redirect('/home');
+            Auth::login($user, $remember = true);            
+            return redirect('/main');
         } else {
             return redirect('/');
         }

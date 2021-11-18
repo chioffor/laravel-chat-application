@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGroupMemberTable extends Migration
+class CreateGroupUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -17,8 +17,6 @@ class CreateGroupMemberTable extends Migration
             $table->id();
             $table->integer('group_id');
             $table->integer('user_id');
-            $table->integer('unreadCount')->default(0);
-            $table->boolean('favorite')->default(0);
             $table->timestamps();
         });
     }
