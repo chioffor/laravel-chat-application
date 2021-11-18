@@ -2,27 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-
 use App\Http\Controllers\GroupController;
-use App\Http\Controllers\GroupUserController;
-use App\Http\Controllers\ChatController;
-use App\Http\Controllers\DirectController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserChatController;
-
 use App\Models\Chat;
 use App\Models\Group;
 use App\Models\User;
-use App\Models\Direct;
-
 use App\Events\ChatSent;
-use App\Events\ReadChatMessage;
-use App\Events\ClickedFavorite;
+use App\Events\NewUserJoined;
 
 
 Route::get('/', function () {
     if (Auth::check()) {
-        return redirect('/home');
+        return redirect('/main');
     } else {        
         return view('entry');
     } 
@@ -30,41 +21,55 @@ Route::get('/', function () {
 
 Route::post('/entry', [UserController::class, 'store']);    
 
-Route::get('/home', function () { 
-    $user = request()->user();   
-    return view('home', [
-        "user" => Auth::user(), 
+
+Route::get('/main', function () { 
+    $user = Auth::user();
+    $main = Group::find(1);
+    $welcome = null;
+
+    if (!$main->users->containsStrict('id', $user->id)) {
+        $main->users()->save($user);
+        $welcome = true;
+        $data = [
+            "url" => url('/main'),
+            "welcomeMessage" => $welcome,
+            "new_user_name" => $user->name,
+        ];
+        
+        event(new NewUserJoined($data));
+    } else {
+        $welcome = false;
+    }
+
+
+    return view('main', [
+        "user" => $user, 
+        "group" => Group::find(1), 
         "groups" => Group::all(),
-        "directs" => $user->directs,
+        "otherGroups" => Group::all()->diff($user->groups),
+        "welcome" => $welcome,      
     ]);    
-})->middleware('auth')->name('home');
+})->middleware('auth')->name('main');
 
-Route::post('/create-group', [GroupController::class, 'store']);
+Route::post('/main', function () {
+    $user = Auth::user();
+    $id = request()->input('id');
+    $group = Group::find($id);
 
-Route::get('/home/group/{id}', [GroupController::class, 'show'])
-    ->middleware('auth')
-    ->name('group-page');
+    $chat = new Chat;
+    $chat->chat = request()->input('message');
 
-Route::get('/home/join/{groupID}', [GroupUserController::class, 'edit'])
-    ->middleware('auth')
-    ->name('join-group');
+    $group->chats()->save($chat);
+    $user->chats()->save($chat);
 
-Route::get('/home/leave/{groupID}', [GroupUserController::class, 'edit'])
-    ->middleware('auth')
-    ->name('leave-group');
+    $data = [
+        "username" => $user->name,
+        "message" => $chat->chat,
+        "time" => $chat->getTime(),
+        "userID" => $user->id,
+        
+    ];
 
-Route::post('/group/chat/{groupID}', [ChatController::class, 'store']);
-Route::post('chat-message', [ChatController::class, 'store']);
-Route::get('/favorite/{groupID}', [GroupUserController::class, 'update'])
-    ->name('favorite');    
-Route::get('/home/direct/{id}', [DirectController::class, 'store']);
-Route::get('/home/private/{id}', [DirectController::class, 'show'])
-    ->middleware('auth')
-    ->name('private-page');
-Route::post('/home/private/{id}', [ChatController::class, 'store']);
-Route::post('/home/group/{id}', [ChatController::class, 'store']);
-Route::get('/updateChatsCount/{id}', [UserChatController::class, 'update']);    
+    event(new ChatSent($data));
 
-Route::get("/goHome", function () {
-    return redirect()->route('home');
 });
