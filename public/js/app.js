@@ -1842,15 +1842,13 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _emojis__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./emojis */ "./resources/js/emojis.js");
-/* harmony import */ var _chatHelpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chatHelpers */ "./resources/js/chatHelpers.js");
-/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers */ "./resources/js/helpers.js");
-/* harmony import */ var _templates__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./templates */ "./resources/js/templates.js");
+/* harmony import */ var _chatHelpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chatHelpers */ "./resources/js/chatHelpers.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./helpers */ "./resources/js/helpers.js");
+/* harmony import */ var _templates__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./templates */ "./resources/js/templates.js");
 var _require = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js"),
     toArray = _require.toArray;
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-
 
 
 
@@ -1860,43 +1858,18 @@ $.ajaxSetup({
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
   }
 });
-var chatDiv = $("#group-page-chat-div");
-var emojiPickerContentOpen = false;
 
-if (chatDiv.length) {
-  $((0,_helpers__WEBPACK_IMPORTED_MODULE_2__.scrollPageTop)(chatDiv));
-}
-
-function displayCreateInputDiv() {
-  $('#group-form').prepend("<div class=\"input-group mb-2\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Choose a name\" name=\"group-name\">\n            <input type=\"submit\" class=\"btn btn-outline-secondary\" value=\"Submit\">\n        </div>");
-}
-
-var incrementMembersCount = function incrementMembersCount() {
-  var val = Number($('#member-count').text());
-  $('#member-count').text(val + 1);
-};
-
-var decrementMembersCount = function decrementMembersCount() {
-  var val = Number($('#member-count').text());
-  $('#member-count').text(val - 1);
-};
-
-function appendChat(template) {
-  $('#chat-message-info-list-item').append(template);
-  (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.scrollPageTop)(chatDiv);
-}
-
-function checkUrl(url) {
-  return url === window.location.href;
+if (_helpers__WEBPACK_IMPORTED_MODULE_1__.chatDiv.length) {
+  $((0,_helpers__WEBPACK_IMPORTED_MODULE_1__.scrollPageTop)(_helpers__WEBPACK_IMPORTED_MODULE_1__.chatDiv));
 }
 
 $(".create-new-group").on("click", function () {
   this.remove();
-  displayCreateInputDiv();
+  (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.displayCreateInputDiv)();
 });
 $(".send").on("click", function (e) {
   e.preventDefault();
-  (0,_chatHelpers__WEBPACK_IMPORTED_MODULE_1__.sendChatData)();
+  (0,_chatHelpers__WEBPACK_IMPORTED_MODULE_0__.sendChatData)();
 });
 $(".emoji-picker-button").on("click", function (e) {
   e.preventDefault();
@@ -1904,15 +1877,15 @@ $(".emoji-picker-button").on("click", function (e) {
   var display = $('.emoji-dropleft-content').css("display");
 
   if (display == 'none') {
-    (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.showEmojiDisplay)();
-    (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.displayEmojis)();
-    (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.displayCategoryItems)('emoticons');
+    (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.showEmojiDisplay)();
+    (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.displayEmojis)();
+    (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.displayCategoryItems)('emoticons');
   } else {
     emojiContent.css("display", "none");
   }
 });
 $("body").on("click", ".emoji-category", function (e) {
-  (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.displayCategoryItems)($(this).attr("id"));
+  (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.displayCategoryItems)($(this).attr("id"));
 });
 $("body").on("click", ".emoji-selected", function () {
   var textArea = $(".message"); //const textVal = textArea.val();
@@ -1922,7 +1895,7 @@ $("body").on("click", ".emoji-selected", function () {
 });
 $("body *").on("click", ":not(.emoji-picker-button, .emoji-dropleft-content, .emoji-dropleft-content *)", function (e) {
   if (e.target === this) {
-    (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.hideEmojiDisplay)();
+    (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.hideEmojiDisplay)();
   } else {
     return;
   }
@@ -1930,14 +1903,11 @@ $("body *").on("click", ":not(.emoji-picker-button, .emoji-dropleft-content, .em
   e.stopPropagation();
 });
 Echo["private"]('room').listen('ChatSent', function (e) {
-  //let url = window.location.href;
-  //if (checkUrl(e.data.url.group))
-  appendChat((0,_templates__WEBPACK_IMPORTED_MODULE_3__.chatTemplate)(e.data)); // if (checkUrl(e.data.url.home))
-  //     updateChatsCount('add-one', e.data.id, e.data.url.group);  
+  if ((0,_helpers__WEBPACK_IMPORTED_MODULE_1__.checkUrl)(e.data.url)) (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.appendChat)((0,_templates__WEBPACK_IMPORTED_MODULE_2__.chatTemplate)(e.data));
 }).listen('NewUserJoined', function (e) {
   if (e.data.url === window.location.href) {
-    appendChat((0,_templates__WEBPACK_IMPORTED_MODULE_3__.newUserJoinedGreetingsTemplate)(e.data.new_user_name));
-    (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.appendUserToMembersList)(e.data.new_user_name);
+    (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.appendChat)((0,_templates__WEBPACK_IMPORTED_MODULE_2__.newUserJoinedGreetingsTemplate)(e.data.new_user_name));
+    (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.appendUserToMembersList)(e.data.new_user_name);
   }
 });
 
@@ -2072,19 +2042,20 @@ var EmojiList = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "chatDiv": () => (/* binding */ chatDiv),
 /* harmony export */   "hideEmojiDisplay": () => (/* binding */ hideEmojiDisplay),
 /* harmony export */   "showEmojiDisplay": () => (/* binding */ showEmojiDisplay),
 /* harmony export */   "displayEmojis": () => (/* binding */ displayEmojis),
 /* harmony export */   "displayCategoryItems": () => (/* binding */ displayCategoryItems),
-/* harmony export */   "userJoinedTemplate": () => (/* binding */ userJoinedTemplate),
-/* harmony export */   "userLeftTemplate": () => (/* binding */ userLeftTemplate),
 /* harmony export */   "appendUserToMembersList": () => (/* binding */ appendUserToMembersList),
-/* harmony export */   "removeUserFromMembersList": () => (/* binding */ removeUserFromMembersList),
-/* harmony export */   "updateChatsCount": () => (/* binding */ updateChatsCount),
-/* harmony export */   "scrollPageTop": () => (/* binding */ scrollPageTop)
+/* harmony export */   "scrollPageTop": () => (/* binding */ scrollPageTop),
+/* harmony export */   "displayCreateInputDiv": () => (/* binding */ displayCreateInputDiv),
+/* harmony export */   "appendChat": () => (/* binding */ appendChat),
+/* harmony export */   "checkUrl": () => (/* binding */ checkUrl)
 /* harmony export */ });
 /* harmony import */ var _emojis__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./emojis */ "./resources/js/emojis.js");
 
+var chatDiv = $("#group-page-chat-div");
 var hideEmojiDisplay = function hideEmojiDisplay() {
   $(".emoji-dropleft-content").css("display", "none");
 };
@@ -2113,56 +2084,21 @@ var displayCategoryItems = function displayCategoryItems(t) {
   });
   emojiCategorySelectedDiv.html(emjs);
 };
-var userJoinedTemplate = function userJoinedTemplate(data) {
-  return "<li class=\"list-group-item\">\n            <div><span class=\"fw-bold\">".concat(data.username, "</span> <span class=\"text-muted\">has joined the group</span></div>\n        </li>");
-};
-var userLeftTemplate = function userLeftTemplate(username) {
-  return "<li class=\"list-group-item\">\n            <div><span class=\"fw-bold\">".concat(username, "</span> <span class=\"text-muted\">has left the group</span></div>\n        </li>");
-}; // export const appendUserToMembersList = (name, id) => {
-//     $('#info-members-list').append(
-//         `<li class="list-group-item members-list-item" id="${id}">
-//             <div class="d-flex sub align-items-center">
-//                 <div class="profile-pic rounded-circle me-2"></div>
-//                 <div class="fw-bold me-3 flex-grow-1">${name}</div>  
-//                 <div class="dropdown">
-//                     <button class="select-dots btn" id="" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
-//                     <ul class="dropdown-menu bg-light">
-//                         <li class="dropdown-item"><a class="" href="#">Direct Message</a></li>
-//                     </ul>
-//                 </div>         
-//             </div>
-//         </li>`
-//     )
-// }
-
 var appendUserToMembersList = function appendUserToMembersList(name) {
   $('#members-list').append("<li class=\"list-group-item d-flex\">\n            <div><i class=\"bi bi-circle-fill me-2\" style=\"color: green;\"></i></div>\n            <div>".concat(name, "</div>\n        </li>"));
 };
-var removeUserFromMembersList = function removeUserFromMembersList(id) {
-  $("#".concat(id)).remove();
-};
-var updateChatsCount = function updateChatsCount(info, id, url) {
-  // const data = {
-  //     url: url,
-  // };
-  $.get("/updateChatsCount/".concat(id), {
-    url: url
-  }, function (data) {
-    var element = $('#' + id);
-    var val = Number(element.text());
-
-    switch (info) {
-      case 'add-one':
-        return element.text(val + 1);
-
-      case 'reset':
-        return element.text(0);
-    }
-  });
-};
 var scrollPageTop = function scrollPageTop(elem) {
-  //$('#group-page-chat-div').scrollTop($('#group-page-chat-div')[0].scrollHeight);
   elem.scrollTop(elem[0].scrollHeight);
+};
+var displayCreateInputDiv = function displayCreateInputDiv() {
+  $('#group-form').prepend("<div class=\"input-group mb-2\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Choose a name\" name=\"group-name\">\n            <input type=\"submit\" class=\"btn btn-outline-secondary\" value=\"Submit\">\n        </div>");
+};
+var appendChat = function appendChat(template) {
+  $('#chat-message-info-list-item').append(template);
+  scrollPageTop(chatDiv);
+};
+var checkUrl = function checkUrl(url) {
+  return url === window.location.href;
 };
 
 /***/ }),
@@ -2192,7 +2128,6 @@ var getTemp = function getTemp(username, message, time, class_) {
 };
 
 var chatTemplate = function chatTemplate(data) {
-  // let userID = userID;
   var chatUserID = data.userID;
   console.log('chat ID = ' + chatUserID);
   console.log('USer ID = ' + userID);

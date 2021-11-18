@@ -38,7 +38,6 @@ const getTemp = (username, message, time, class_) => {
 }
 
 export const chatTemplate = (data) => {
-    // let userID = userID;
     let chatUserID = data.userID;
     console.log('chat ID = ' + chatUserID);
     console.log('USer ID = ' + userID);

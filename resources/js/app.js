@@ -1,20 +1,21 @@
 const { toArray } = require('lodash');
 require('./bootstrap');
 
-import { EmojiList } from './emojis';
 import {
     sendChatData
 } from './chatHelpers';
 
 import {     
     appendUserToMembersList,
-    removeUserFromMembersList,
-    updateChatsCount,
     displayEmojis,
     scrollPageTop,
     displayCategoryItems,
     hideEmojiDisplay,
-    showEmojiDisplay
+    showEmojiDisplay,
+    displayCreateInputDiv,
+    appendChat,
+    chatDiv,
+    checkUrl
 } from './helpers';
 
 import {
@@ -28,43 +29,9 @@ $.ajaxSetup({
     }
 });
 
-const chatDiv = $( "#group-page-chat-div" );
-let emojiPickerContentOpen = false;
 
 if (chatDiv.length) {
     $(scrollPageTop(chatDiv));
-}
-
-function displayCreateInputDiv() {
-    $('#group-form').prepend(
-        `<div class="input-group mb-2">
-            <input type="text" class="form-control" placeholder="Choose a name" name="group-name">
-            <input type="submit" class="btn btn-outline-secondary" value="Submit">
-        </div>`
-    );
-}
-
-const incrementMembersCount = () => {
-    let val = Number($('#member-count').text());
-    $('#member-count').text(val + 1);
-}
-
-const decrementMembersCount = () => {
-    let val = Number($('#member-count').text());
-    $('#member-count').text(val - 1);
-}
-
-
-
-function appendChat(template) {
-    $('#chat-message-info-list-item').append(
-        template
-    );
-    scrollPageTop(chatDiv);
-}
-
-function checkUrl(url) {
-    return url === window.location.href;
 }
 
 
@@ -115,11 +82,9 @@ $("body *").on("click", ":not(.emoji-picker-button, .emoji-dropleft-content, .em
 
 Echo.private('room')
     .listen('ChatSent', (e) => {
-        //let url = window.location.href;
-        //if (checkUrl(e.data.url.group))
-        appendChat(chatTemplate(e.data));
-        // if (checkUrl(e.data.url.home))
-        //     updateChatsCount('add-one', e.data.id, e.data.url.group);  
+        if (checkUrl(e.data.url))
+            appendChat(chatTemplate(e.data));
+        
     })
     .listen('NewUserJoined', (e) => {
         if (e.data.url === window.location.href ) {

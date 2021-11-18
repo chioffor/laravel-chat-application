@@ -66,8 +66,8 @@ Route::post('/main', function () {
         "username" => $user->name,
         "message" => $chat->chat,
         "time" => $chat->getTime(),
-        "userID" => $user->id,
-        
+        "url" => url()->current(),
+        "userID" => $user->id,        
     ];
 
     event(new ChatSent($data));

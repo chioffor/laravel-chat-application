@@ -1,6 +1,8 @@
 import { EmojiList } from "./emojis";
 
 
+export const chatDiv = $( "#group-page-chat-div" );
+
 export const hideEmojiDisplay = () => {
     $(".emoji-dropleft-content").css("display", "none");
 }
@@ -38,38 +40,7 @@ export const displayCategoryItems = (t) => {
     );
 }
 
-export const userJoinedTemplate = (data) => {
-    return (
-        `<li class="list-group-item">
-            <div><span class="fw-bold">${data.username}</span> <span class="text-muted">has joined the group</span></div>
-        </li>`
-    )
-}
 
-export const userLeftTemplate = (username) => {
-    return (
-        `<li class="list-group-item">
-            <div><span class="fw-bold">${username}</span> <span class="text-muted">has left the group</span></div>
-        </li>`
-    )
-}
-
-// export const appendUserToMembersList = (name, id) => {
-//     $('#info-members-list').append(
-//         `<li class="list-group-item members-list-item" id="${id}">
-//             <div class="d-flex sub align-items-center">
-//                 <div class="profile-pic rounded-circle me-2"></div>
-//                 <div class="fw-bold me-3 flex-grow-1">${name}</div>  
-//                 <div class="dropdown">
-//                     <button class="select-dots btn" id="" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
-//                     <ul class="dropdown-menu bg-light">
-//                         <li class="dropdown-item"><a class="" href="#">Direct Message</a></li>
-//                     </ul>
-//                 </div>         
-//             </div>
-//         </li>`
-//     )
-// }
 export const appendUserToMembersList = (name) => {
     $('#members-list').append(
         `<li class="list-group-item d-flex">
@@ -79,29 +50,27 @@ export const appendUserToMembersList = (name) => {
     )
 }
 
-export const removeUserFromMembersList = (id) => {
-    $(`#${id}`).remove();    
-}
-
-export const updateChatsCount = (info, id, url) => {
-    // const data = {
-    //     url: url,
-    // };
-
-    $.get(`/updateChatsCount/${id}`, {url: url}, function(data) {
-        let element = $('#' + id);
-        let val = Number(element.text());
-        switch(info) {
-            case 'add-one':
-                return element.text(val + 1);
-            case 'reset':
-                return element.text(0);
-
-        }
-    });    
-}
 
 export const scrollPageTop = (elem) => {
-    //$('#group-page-chat-div').scrollTop($('#group-page-chat-div')[0].scrollHeight);
     elem.scrollTop(elem[0].scrollHeight);
+}
+
+export const displayCreateInputDiv = () => {
+    $('#group-form').prepend(
+        `<div class="input-group mb-2">
+            <input type="text" class="form-control" placeholder="Choose a name" name="group-name">
+            <input type="submit" class="btn btn-outline-secondary" value="Submit">
+        </div>`
+    );
+}
+
+export const appendChat = (template) => {
+    $('#chat-message-info-list-item').append(
+        template
+    );
+    scrollPageTop(chatDiv);
+}
+
+export const checkUrl = (url) => {
+    return url === window.location.href;
 }
