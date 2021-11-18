@@ -1888,8 +1888,7 @@ $("body").on("click", ".emoji-category", function (e) {
   (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.displayCategoryItems)($(this).attr("id"));
 });
 $("body").on("click", ".emoji-selected", function () {
-  var textArea = $(".message"); //const textVal = textArea.val();
-
+  var textArea = $(".message");
   var newTextVal = textArea.val() + $(this).text();
   textArea.val(newTextVal);
 });
@@ -2129,8 +2128,6 @@ var getTemp = function getTemp(username, message, time, class_) {
 
 var chatTemplate = function chatTemplate(data) {
   var chatUserID = data.userID;
-  console.log('chat ID = ' + chatUserID);
-  console.log('USer ID = ' + userID);
   var user_chat_class = "list-group-item chat-list-item chat-list-item-user d-flex mt-1 sub";
   var other_chat_class = "list-group-item chat-list-item chat-list-item d-flex mt-1 sub";
   if (userID == chatUserID) return getTemp(data.username, data.message, data.time, user_chat_class);else return getTemp(data.username, data.message, data.time, other_chat_class);

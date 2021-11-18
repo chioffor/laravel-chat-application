@@ -39,8 +39,6 @@ const getTemp = (username, message, time, class_) => {
 
 export const chatTemplate = (data) => {
     let chatUserID = data.userID;
-    console.log('chat ID = ' + chatUserID);
-    console.log('USer ID = ' + userID);
     let user_chat_class = "list-group-item chat-list-item chat-list-item-user d-flex mt-1 sub";
     let other_chat_class = "list-group-item chat-list-item chat-list-item d-flex mt-1 sub";
    

@@ -65,7 +65,6 @@ $("body").on("click", ".emoji-category", function(e) {
 
 $("body").on("click", ".emoji-selected", function() {
     let textArea = $(".message");
-    //const textVal = textArea.val();
     let newTextVal = textArea.val() + $(this).text();
     textArea.val(newTextVal);
 });
