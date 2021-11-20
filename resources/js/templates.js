@@ -22,25 +22,19 @@ export const newUserJoinedGreetingsTemplate = (username) => {
 const getTemp = (username, message, time, class_) => {
     return (
         `<li class="${class_}">
-            <div class="chat-profile-pic me-2 mt-2"><span class="circle mt-2">${username[0]}</span></div>
-            <div class="">
-                <div class="fw-bold">
-                    <span class="chat-username">${username}</span>
-                    <span class="text-muted">
-                        <i class="bi bi-dot"></i>
-                        <span class="time">${time}</span>
-                    </span>
-                </div>
-                <div class="chat-text text-muted">${message}</div>
-            </div>
+            <div class="chat-profile-pic me-2"><span class="circle">${username[0].toUpperCase()}</span></div>
+            <div class="chat-text-sec flex-grow-1">
+                <span class="chat-username text-muted me-2">${username}</span>
+                <span class="chat-text">${message}</span>
+            </div>           
         </li>`
     )
 }
 
 export const chatTemplate = (data) => {
     let chatUserID = data.userID;
-    let user_chat_class = "list-group-item chat-list-item chat-list-item-user d-flex mt-1 sub";
-    let other_chat_class = "list-group-item chat-list-item chat-list-item d-flex mt-1 sub";
+    let user_chat_class = "list-group-item chat-list-item chat-list-item-user d-flex mt-2 sub";
+    let other_chat_class = "list-group-item chat-list-item chat-list-item d-flex mt-2 sub";
    
     if (userID == chatUserID) 
         return getTemp(data.username, data.message, data.time, user_chat_class);

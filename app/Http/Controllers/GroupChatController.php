@@ -1,16 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Http\Request;
+use App\Events\ChatSent;
+use App\Models\Chat;
 use App\Models\Group;
-use App\Models\Member;
-use App\Events\NewUserJoined;
 
 
-class GroupController extends Controller
+class GroupChatController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -40,17 +38,25 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        $user = $request->user();
-        if ($request->input('group-name')) {
-            $name = $request->input('group-name');
-            $group = new Group;
-            $group->name = $name;
-            $user->groups()->save($group);
-            return redirect(route('group-page', ["id" => $group->id]));
-        } else {
-            return redirect('/home');
-        }
+        $user = Auth::user();
+        $id = $request->input('id');
+        $group = Group::find($id);
 
+        $chat = new Chat;
+        $chat->chat = $request->input('message');
+
+        $group->chats()->save($chat);
+        $user->chats()->save($chat);
+
+        $data = [
+            "username" => $user->name,
+            "message" => $chat->chat,
+            "time" => $chat->getTime(),
+            "url" => url()->current(),
+            "userID" => $user->id,        
+        ];
+
+        event(new ChatSent($data));
 
     }
 
@@ -60,34 +66,9 @@ class GroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show($id)
     {
-        $user = Auth::user();
-        $main = Group::find(1);
-        $welcome = null;
-
-        if (!$main->users->containsStrict('id', $user->id)) {
-            $main->users()->save($user);
-            $welcome = true;
-            $data = [
-                "url" => url('/main'),
-                "welcomeMessage" => $welcome,
-                "new_user_name" => $user->name,
-            ];
-            
-            event(new NewUserJoined($data));
-        } else {
-            $welcome = false;
-        }
-
-
-        return view('main', [
-            "user" => $user, 
-            "group" => Group::find(1), 
-            "groups" => Group::all(),
-            "otherGroups" => Group::all()->diff($user->groups),
-            "welcome" => $welcome,      
-        ]);    
+        //
     }
 
     /**

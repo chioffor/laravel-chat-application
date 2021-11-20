@@ -1842,7 +1842,7 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _chatHelpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chatHelpers */ "./resources/js/chatHelpers.js");
+/* harmony import */ var _chatMessage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chatMessage */ "./resources/js/chatMessage.js");
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./helpers */ "./resources/js/helpers.js");
 /* harmony import */ var _templates__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./templates */ "./resources/js/templates.js");
 var _require = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js"),
@@ -1869,7 +1869,8 @@ $(".create-new-group").on("click", function () {
 });
 $(".send").on("click", function (e) {
   e.preventDefault();
-  (0,_chatHelpers__WEBPACK_IMPORTED_MODULE_0__.sendChatData)();
+  var c = new _chatMessage__WEBPACK_IMPORTED_MODULE_0__.ChatMessage();
+  c.sendChatData();
 });
 $(".emoji-picker-button").on("click", function (e) {
   e.preventDefault();
@@ -1947,46 +1948,69 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__.default({
 
 /***/ }),
 
-/***/ "./resources/js/chatHelpers.js":
+/***/ "./resources/js/chatMessage.js":
 /*!*************************************!*\
-  !*** ./resources/js/chatHelpers.js ***!
+  !*** ./resources/js/chatMessage.js ***!
   \*************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "sendChatData": () => (/* binding */ sendChatData)
+/* harmony export */   "ChatMessage": () => (/* binding */ ChatMessage)
 /* harmony export */ });
-function getMessage(id) {
-  return $(id).val();
-}
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function zeroOutTextArea(id) {
-  $(id).val('');
-}
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-var sendChatData = function sendChatData() {
-  var elementId = '.message';
-  var message = getMessage(elementId);
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-  if (message != '') {
-    var url = window.location.href;
-    var path = window.location.pathname; //let id = id;
+var ChatMessage = /*#__PURE__*/function () {
+  function ChatMessage() {
+    _classCallCheck(this, ChatMessage);
 
-    var data = {
-      message: message,
-      url: url,
-      id: id,
-      userID: userID
-    };
-    $.post(path, data, function (data) {
-      console.log(data);
-    }); //alert(message);
-
-    zeroOutTextArea(elementId);
+    this.textAreaClassName = ".message";
+    this.url = window.location.href;
+    this.path = window.location.pathname;
+    this.groupID = id;
+    this.userID = userID;
   }
-};
+
+  _createClass(ChatMessage, [{
+    key: "getChatInput",
+    value: function getChatInput() {
+      return $(this.textAreaClassName).val();
+    }
+  }, {
+    key: "zeroOutTextArea",
+    value: function zeroOutTextArea() {
+      $(this.textAreaClassName).val('');
+    }
+  }, {
+    key: "getPostData",
+    value: function getPostData() {
+      var data = {
+        message: this.getChatInput(),
+        url: this.url,
+        id: this.groupID,
+        userID: this.userID
+      };
+      return data;
+    }
+  }, {
+    key: "sendChatData",
+    value: function sendChatData() {
+      if (this.getChatInput() !== '') {
+        $.post(this.path, this.getPostData(), function (data) {
+          console.log(data);
+        });
+        this.zeroOutTextArea();
+      }
+    }
+  }]);
+
+  return ChatMessage;
+}();
 
 /***/ }),
 
@@ -2123,13 +2147,13 @@ var newUserJoinedGreetingsTemplate = function newUserJoinedGreetingsTemplate(use
 };
 
 var getTemp = function getTemp(username, message, time, class_) {
-  return "<li class=\"".concat(class_, "\">\n            <div class=\"chat-profile-pic me-2 mt-2\"><span class=\"circle mt-2\">").concat(username[0], "</span></div>\n            <div class=\"\">\n                <div class=\"fw-bold\">\n                    <span class=\"chat-username\">").concat(username, "</span>\n                    <span class=\"text-muted\">\n                        <i class=\"bi bi-dot\"></i>\n                        <span class=\"time\">").concat(time, "</span>\n                    </span>\n                </div>\n                <div class=\"chat-text text-muted\">").concat(message, "</div>\n            </div>\n        </li>");
+  return "<li class=\"".concat(class_, "\">\n            <div class=\"chat-profile-pic me-2\"><span class=\"circle\">").concat(username[0].toUpperCase(), "</span></div>\n            <div class=\"chat-text-sec flex-grow-1\">\n                <span class=\"chat-username text-muted me-2\">").concat(username, "</span>\n                <span class=\"chat-text\">").concat(message, "</span>\n            </div>           \n        </li>");
 };
 
 var chatTemplate = function chatTemplate(data) {
   var chatUserID = data.userID;
-  var user_chat_class = "list-group-item chat-list-item chat-list-item-user d-flex mt-1 sub";
-  var other_chat_class = "list-group-item chat-list-item chat-list-item d-flex mt-1 sub";
+  var user_chat_class = "list-group-item chat-list-item chat-list-item-user d-flex mt-2 sub";
+  var other_chat_class = "list-group-item chat-list-item chat-list-item d-flex mt-2 sub";
   if (userID == chatUserID) return getTemp(data.username, data.message, data.time, user_chat_class);else return getTemp(data.username, data.message, data.time, other_chat_class);
 };
 

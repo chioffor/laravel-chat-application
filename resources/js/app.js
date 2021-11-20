@@ -2,8 +2,8 @@ const { toArray } = require('lodash');
 require('./bootstrap');
 
 import {
-    sendChatData
-} from './chatHelpers';
+    ChatMessage
+} from './chatMessage';
 
 import {     
     appendUserToMembersList,
@@ -42,7 +42,8 @@ $(".create-new-group").on("click", function() {
 
 $( ".send" ).on("click", function(e) {
     e.preventDefault();
-    sendChatData();
+    let c = new ChatMessage();
+    c.sendChatData();
 });
 
 $( ".emoji-picker-button" ).on("click", function(e) {
@@ -58,6 +59,7 @@ $( ".emoji-picker-button" ).on("click", function(e) {
         emojiContent.css("display", "none");           
     }
 });
+
 
 $("body").on("click", ".emoji-category", function(e) {    
     displayCategoryItems($(this).attr("id"));

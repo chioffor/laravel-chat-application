@@ -9,22 +9,15 @@
             @foreach ($chats as $chat)
                 @if ($chat->created_at > $user->created_at)
                     @if ($chat->user->id === $user->id)
-                        <li class="list-group-item mt-1 d-flex border-0 chat-list-item sub chat-list-item-user">
+                        <li class="list-group-item mt-2 d-flex border-0 chat-list-item sub chat-list-item-user">
                     @else
-                        <li class="list-group-item mt-1 d-flex chat-list-item sub chat-list-item">
-                    @endif     
-                        <div class="chat-profile-pic mt-2 me-2"><span class="circle mt-2">{{ $chat->user->name[0] }}</span></div>
-                        <div class="">
-                            <div class="fw-bold">
-                                <!-- <span>{{ $chat->user->id == $user->id ? "You" : $chat->user->name }}</span> -->
-                                <span class="chat-username">{{ $chat->user->name }}</span>
-                                <span class="text-muted">
-                                    <i class="bi bi-dot"></i>
-                                    <span class="time">{{ $chat->getTime() }}</span>
-                                </span>
-                            </div>
-                            <div class="chat-text text-muted">{{ $chat->chat }}</div>
-                            
+                        <li class="list-group-item mt-2 d-flex chat-list-item sub chat-list-item">
+                    @endif
+                        
+                        <div class="chat-profile-pic me-2"><span class="circle">{{ strtoupper($chat->user->name[0]) }}</span></div>                      
+                        <div class="chat-text-sec me-2 flex-grow-1">
+                            <span class="chat-username text-muted me-2">{{ $chat->user->name }}</span>
+                            <span class="chat-text">{{ $chat->chat }}</span>
                         </div>
                     </li>
                 @endif

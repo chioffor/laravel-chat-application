@@ -59,10 +59,13 @@ input[type="file"] {
     border-bottom: 1px solid;
 }
 
-.chat-text {
+.chat-text-sec {
     overflow-wrap: anywhere;
     width: auto;
     font-size: 14px;
+}
+.chat-text {
+    font-weight: 550;
 }
 
 @media screen and (max-width: 900px)  {
@@ -71,10 +74,9 @@ input[type="file"] {
         height: 100vh;
         
     }
-    .chat-list-item-user {
+    /* .chat-list-item-user {
         margin-left: 20%;
-        /* width: 80%;         */
-    }
+    } */
     .chat-list-item, .chat-list-item-user {
         width: 80%;
     }
@@ -91,10 +93,9 @@ input[type="file"] {
         width: 60%;        
     }
     
-    .chat-list-item-user {
+    /* .chat-list-item-user {
         margin-left: 40%;
-        /* width: 60%; */
-    }   
+    }    */
     
 }
 
@@ -147,21 +148,23 @@ input[type="file"] {
     border-radius: 15px;
 }
 
-.chat-list-item {
+/* .chat-list-item {
     background-color: #f8f8f8;
 }
 
 .chat-list-item-user {
     background-color: #add8e6;
-}
+} */
 
 .circle {
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    padding: 5px 12px;
+    padding: 5px 10px;
     background-color: lightgray;
-    font-size: 20px;
+    font-weight: 800px;
+    text-align: center;
+    font-size: 16px;
 }
 
 

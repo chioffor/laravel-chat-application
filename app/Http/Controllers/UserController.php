@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\StoreUserNameRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -34,18 +34,19 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserNameRequest $request)
     {
         $user = new User;
-        if ($request->input('name')) {
-            $user->name = $request->input('name');
-            $user->password = uniqid("user", true);
-            $user->save();
-            Auth::login($user, $remember = true);            
-            return redirect('/main');
-        } else {
-            return redirect('/');
-        }
+        $validated = $request->validated();
+
+        $user->name = $validated['name'];
+        $user->password = uniqid("user", true);
+
+        $user->save();
+        Auth::login($user, $remember = true);    
+                
+        return redirect('/main');
+        
     }
 
     /**
