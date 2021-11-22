@@ -1,4 +1,4 @@
-# Chat App    ##[chikaoffor.com/chatapp](https://chikaoffor.com/chatapp).
+# Chat App    [chikaoffor.com/chatapp](https://chikaoffor.com/chatapp).
 A implementation of a chat app using lavarel framework
 
 ## Table of contents
@@ -22,6 +22,8 @@ This app is an implementation of the idea of a chat application.
 * Javascript
 * jQuery
 * Pusher
+* Docker
+* Kubernetes
 
 ## Setup
 The easiest way to view and see the functionalities - visit the test site `https://chikaoffor.com/chatapp`
