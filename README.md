@@ -1,4 +1,4 @@
-# Chat App [test-site](https://chikaoffor.com/chatapp).
+# Chat App [chikaoffor.com/chatapp](https://chikaoffor.com/chatapp).
 A implementation of a chat app using lavarel framework
 
 ## Table of contents
