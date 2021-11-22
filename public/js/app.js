@@ -1859,12 +1859,44 @@ $.ajaxSetup({
   }
 });
 
+var handleFile = function handleFile(file) {
+  if (file.name.endsWith(".jpg")) {
+    var img = new Image(100, 100);
+    var imageDiv = document.getElementById("image-div-main");
+
+    if (imageDiv === null) {
+      $(".chat-body").append("<div class=\"mt-2 d-flex image-div-main border p-2 overflow-auto\" id=\"image-div-main\">\n                </div>");
+    }
+
+    img.classList.add("img-thumbnail");
+    img.classList.add("me-1");
+    img.file = file;
+    var imgID = Math.floor(Math.random() * 100000);
+    $(".image-div-main").append("<div class=\"image-div\" id=\"image-div-".concat(imgID, "\">\n                <button type=\"button\" class=\"img-thumbnail-btn-close btn-close\" aria-label=\"Close\"></button>\n            </div>"));
+    $("#image-div-" + imgID).append(img);
+    var reader = new FileReader();
+
+    reader.onload = function (asyncImg) {
+      return function (e) {
+        asyncImg.src = e.target.result;
+      };
+    }(img);
+
+    reader.readAsDataURL(file);
+  }
+};
+
 if (_helpers__WEBPACK_IMPORTED_MODULE_1__.chatDiv.length) {
   $((0,_helpers__WEBPACK_IMPORTED_MODULE_1__.scrollPageTop)(_helpers__WEBPACK_IMPORTED_MODULE_1__.chatDiv));
 }
 
-$(".create-new-group").on("click", function () {
-  this.remove();
+$(".file-upload").on('change', function () {
+  var x = $("#input-file");
+  handleFile(x[0].files[0]);
+  console.log(x[0].files[0].lastModified);
+});
+$(".create-new-group *").on("click", function (e) {
+  $(".create-new-group").remove();
   (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.displayCreateInputDiv)();
 });
 $(".send").on("click", function (e) {
@@ -1902,8 +1934,20 @@ $("body *").on("click", ":not(.emoji-picker-button, .emoji-dropleft-content, .em
 
   e.stopPropagation();
 });
+$(".collapseGroup").on("click", function () {
+  var x = $(this).parent();
+
+  if ($(".caret", x).hasClass("bi-caret-down-fill")) {
+    $(".caret", x).removeClass("bi-caret-down-fill");
+    $(".caret", x).addClass("bi-caret-right-fill");
+  } else {
+    $(".caret", x).removeClass("bi-caret-right-fill");
+    $(".caret", x).addClass("bi-caret-down-fill");
+  }
+});
 Echo["private"]('room').listen('ChatSent', function (e) {
   if ((0,_helpers__WEBPACK_IMPORTED_MODULE_1__.checkUrl)(e.data.url)) (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.appendChat)((0,_templates__WEBPACK_IMPORTED_MODULE_2__.chatTemplate)(e.data));
+  (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.updateCanvas)(e.data.groupID, e.data.message, e.data.username);
 }).listen('NewUserJoined', function (e) {
   if (e.data.url === window.location.href) {
     (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.appendChat)((0,_templates__WEBPACK_IMPORTED_MODULE_2__.newUserJoinedGreetingsTemplate)(e.data.new_user_name));
@@ -2074,7 +2118,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "scrollPageTop": () => (/* binding */ scrollPageTop),
 /* harmony export */   "displayCreateInputDiv": () => (/* binding */ displayCreateInputDiv),
 /* harmony export */   "appendChat": () => (/* binding */ appendChat),
-/* harmony export */   "checkUrl": () => (/* binding */ checkUrl)
+/* harmony export */   "checkUrl": () => (/* binding */ checkUrl),
+/* harmony export */   "updateCanvas": () => (/* binding */ updateCanvas)
 /* harmony export */ });
 /* harmony import */ var _emojis__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./emojis */ "./resources/js/emojis.js");
 
@@ -2114,7 +2159,7 @@ var scrollPageTop = function scrollPageTop(elem) {
   elem.scrollTop(elem[0].scrollHeight);
 };
 var displayCreateInputDiv = function displayCreateInputDiv() {
-  $('#group-form').prepend("<div class=\"input-group mb-2\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Choose a name\" name=\"group-name\">\n            <input type=\"submit\" class=\"btn btn-outline-secondary\" value=\"Submit\">\n        </div>");
+  $('#group-form').append("<div class=\"input-group mb-2\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Choose a name\" name=\"group-name\">\n            <input type=\"submit\" class=\"btn btn-outline-secondary\" value=\"Submit\">\n        </div>");
 };
 var appendChat = function appendChat(template) {
   $('#chat-message-info-list-item').append(template);
@@ -2122,6 +2167,17 @@ var appendChat = function appendChat(template) {
 };
 var checkUrl = function checkUrl(url) {
   return url === window.location.href;
+};
+var updateCanvas = function updateCanvas(groupID, chatMessage, chatUsername) {
+  var x = chatMessage.length > 25 ? chatMessage.substring(0, 25) + "..." : chatMessage;
+
+  if ($("#last-chat-info-" + groupID).length === 0) {
+    $("#collapseGroup-" + groupID).html("<a href=\"/main\" class=\"d-flex align-items-center p-2\" id=\"last-chat-info-".concat(groupID, "\">\n                <div class=\"chat-profile-pic me-2\">\n                    <span class=\"circle\" id=\"canvas-last-chat-username-initial-").concat(groupID, "\">\n                        ").concat(chatUsername[0].toUpperCase(), "\n                    </span>\n                </div>                     \n                <div class=\"chat-text-sec me-2\">\n                    <div class=\"chat-username text-muted me-2\" id=\"canvas-last-chat-username-").concat(groupID, "\">").concat(chatUsername, "</div>\n                    <div class=\"chat-text fw-bold canvas-last-chat\" id=\"canvas-last-chat-").concat(groupID, "\">\n                        ").concat(x, "\n                    </div>\n                </div>\n            </a>"));
+  } else {
+    $("#canvas-last-chat-username-initial-" + groupID).text(chatUsername[0].toUpperCase());
+    $("#canvas-last-chat-" + groupID).text(x);
+    $("#canvas-last-chat-username-" + groupID).text(chatUsername);
+  }
 };
 
 /***/ }),
@@ -2135,13 +2191,19 @@ var checkUrl = function checkUrl(url) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "welcomeTemplate": () => (/* binding */ welcomeTemplate),
 /* harmony export */   "newUserJoinedGreetingsTemplate": () => (/* binding */ newUserJoinedGreetingsTemplate),
 /* harmony export */   "chatTemplate": () => (/* binding */ chatTemplate)
 /* harmony export */ });
-function welcomeTemplate(name) {
-  return "<li class=\"list-group-item\">\n            <div>\n                Welcome <span class=\"fw-bold\">".concat(name, "</span> to this awesome app.\n                To view more, click on the 3dots on the top right corner of the header\n            </div>\n        </li>");
-}
+// export function welcomeTemplate(name) {
+//     return (
+//         `<li class="list-group-item">
+//             <div>
+//                 Welcome <span class="fw-bold">${name}</span> to this awesome app.
+//                 Chat with people
+//             </div>
+//         </li>`
+//     )
+// }
 var newUserJoinedGreetingsTemplate = function newUserJoinedGreetingsTemplate(username) {
   return "<li class=\"list-group-item\">\n            <div class=\"just-joined\">\n                <span class=\"fw-bold\">".concat(username, "</span> just joined. Say hi to <span class=\"fw-bold\">").concat(username, "</span>                \n            </div>\n        </li>");
 };

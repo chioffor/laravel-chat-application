@@ -63,7 +63,7 @@
                             <li class="list-group-item">
                                 <div class="create-new-group fw-bold text-muted btn">
                                     <span class="me-2 my-auto"><i class="bi bi-plus"></i></span>
-                                    <span class="create-new-group-text my-auto">Create a new group</span>                        
+                                    <span class="my-auto">Create a new group</span>                        
                                 </div>
                                 <div>
                                     <form method="POST" action="/create-group">

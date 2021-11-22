@@ -45,7 +45,7 @@ class UserController extends Controller
         $user->save();
         Auth::login($user, $remember = true);    
                 
-        return redirect('/main');
+        return redirect('/chatapp/main');
         
     }
 

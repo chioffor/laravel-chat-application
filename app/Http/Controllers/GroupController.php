@@ -70,7 +70,7 @@ class GroupController extends Controller
             $main->users()->save($user);
             $welcome = true;
             $data = [
-                "url" => url('/main'),
+                "url" => url('/chatapp/main'),
                 "welcomeMessage" => $welcome,
                 "new_user_name" => $user->name,
             ];

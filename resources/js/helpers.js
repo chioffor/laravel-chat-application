@@ -56,7 +56,7 @@ export const scrollPageTop = (elem) => {
 }
 
 export const displayCreateInputDiv = () => {
-    $('#group-form').prepend(
+    $('#group-form').append(
         `<div class="input-group mb-2">
             <input type="text" class="form-control" placeholder="Choose a name" name="group-name">
             <input type="submit" class="btn btn-outline-secondary" value="Submit">
@@ -73,4 +73,29 @@ export const appendChat = (template) => {
 
 export const checkUrl = (url) => {
     return url === window.location.href;
+}
+
+export const updateCanvas = (groupID, chatMessage, chatUsername) => {
+    let x = chatMessage.length > 25 ? chatMessage.substring(0, 25) + "..." : chatMessage;
+    if ($("#last-chat-info-" + groupID).length === 0) {
+        $("#collapseGroup-" + groupID).html(
+            `<a href="/main" class="d-flex align-items-center p-2" id="last-chat-info-${groupID}">
+                <div class="chat-profile-pic me-2">
+                    <span class="circle" id="canvas-last-chat-username-initial-${groupID}">
+                        ${chatUsername[0].toUpperCase()}
+                    </span>
+                </div>                     
+                <div class="chat-text-sec me-2">
+                    <div class="chat-username text-muted me-2" id="canvas-last-chat-username-${groupID}">${chatUsername}</div>
+                    <div class="chat-text fw-bold canvas-last-chat" id="canvas-last-chat-${groupID}">
+                        ${x}
+                    </div>
+                </div>
+            </a>`
+        )
+    } else {
+        $("#canvas-last-chat-username-initial-" + groupID).text(chatUsername[0].toUpperCase())
+        $("#canvas-last-chat-" + groupID).text(x);
+        $("#canvas-last-chat-username-" + groupID).text(chatUsername);
+    }
 }

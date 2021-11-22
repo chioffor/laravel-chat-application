@@ -26,10 +26,11 @@
             <li class="list-group-item">
                 <div>
                     Welcome <span class="fw-bold">{{ $user->name }}</span> to this awesome app.
-                    To view more, click on the 3dots on the top right corner of the header
+                    Chat with people
                 </div>
             </li>
         @endif
         
     </ul>
+    
 </div>

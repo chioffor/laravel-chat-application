@@ -89,7 +89,7 @@ input[type="file"] {
       overflow: auto;
       margin-bottom: 0;
     }
-    .chat-list-item, .chat-list-item-user {
+    .chat-list-item, .chat-list-item-user, .image-div-main {
         width: 60%;        
     }
     
@@ -197,7 +197,19 @@ input[type="file"] {
     cursor: pointer;
 }
 
-/* CHAT DISPLAY */
+.collapse-btn:focus {
+    outline: none;
+}
 
-   /* ## chat message item display */
-   
+.chats-body {
+    height: 80vh;
+}
+
+.image-div {
+    position: relative;
+}
+
+.img-thumbnail-btn-close {
+    position: absolute;
+    right: 0;
+}

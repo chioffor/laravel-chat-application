@@ -7,16 +7,20 @@ use App\Http\Controllers\GroupChatController;
 use App\Http\Controllers\UserController;
 
 
-Route::get('/', function () {
+Route::get('/', function() {
+    return;
+});
+
+Route::get('/chatapp', function () {
     if (Auth::check()) {
-        return redirect('/main');
+        return redirect('/chatapp/main');
     } else {        
         return view('entry');
     } 
 })->name('login');
 
-Route::post('/entry', [UserController::class, 'store']);
+Route::post('/chatapp/entry', [UserController::class, 'store']);
 
-Route::get('/main', [GroupController::class, 'show'])->middleware('auth')->name('main');
+Route::get('/chatapp/main', [GroupController::class, 'show'])->middleware('auth');
 
-Route::post('/main', [GroupChatController::class, 'store']);
+Route::post('/chatapp/main', [GroupChatController::class, 'store']);

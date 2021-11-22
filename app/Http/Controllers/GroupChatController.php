@@ -53,7 +53,8 @@ class GroupChatController extends Controller
             "message" => $chat->chat,
             "time" => $chat->getTime(),
             "url" => url()->current(),
-            "userID" => $user->id,        
+            "userID" => $user->id,
+            "groupID" => $group->id,        
         ];
 
         event(new ChatSent($data));

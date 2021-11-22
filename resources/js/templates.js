@@ -1,13 +1,13 @@
-export function welcomeTemplate(name) {
-    return (
-        `<li class="list-group-item">
-            <div>
-                Welcome <span class="fw-bold">${name}</span> to this awesome app.
-                To view more, click on the 3dots on the top right corner of the header
-            </div>
-        </li>`
-    )
-}
+// export function welcomeTemplate(name) {
+//     return (
+//         `<li class="list-group-item">
+//             <div>
+//                 Welcome <span class="fw-bold">${name}</span> to this awesome app.
+//                 Chat with people
+//             </div>
+//         </li>`
+//     )
+// }
 
 export const newUserJoinedGreetingsTemplate = (username) => {
     return (

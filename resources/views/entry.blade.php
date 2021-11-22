@@ -33,7 +33,7 @@
     </head>
     <body class="antialiased">
         <div class="container-fluid position-absolute top-50 start-50 translate-middle" id="entry">
-            <form method="POST" action="/entry">
+            <form method="POST" action="/chatapp/entry">
                 @csrf
                 <div class="d-flex">
                     <input type="text" class="form-control bg-light shadow" name="name" placeholder="Choose a name...">

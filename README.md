@@ -24,27 +24,12 @@ This app is an implementation of the idea of a chat application.
 * Pusher
 
 ## Setup
-The easiest way to run this project locally is through docker/docker-compose
+The easiest way to view and see the functionalities - visit the test site `https://chikaoffor.com/chatapp`
 
-Assuming you have `docker` and `docker-compose` installed on your system.
-
-In the directory of your choice.
-You can:
+To run on your system via composer:
 ```
-$ wget https://raw.githubusercontent.com/chioffor/chat-group-app/main/docker-compose.yml
-$ docker-compose up
-```
-After services are up and running, open a new terminal and enter
-
-```
-$ docker exec main php artisan migrate
-```
-On your web browser visit "localhost:8000"   
-
-Or via composer:
-```
-$ git clone https://github.com/chioffor/chat-group-app.git
-$ cd chat-group-app$ 
+$ git clone https://github.com/chioffor/laravel-chat-application.git
+$ cd laravel-chat-application
 $ cp .env.example .env    #update environment variables in .env file - database, pusher, broadcast_driver, etc
 $ composer install
 $ npm install && npm run dev
