@@ -1,6 +1,7 @@
 # Chat App   
-An implementation of a chat application using lavarel framework
-Test site - [chikaoffor.com/chatapp](https://chikaoffor.com/chatapp).
+An implementation of a chat application using lavarel framework.
+
+-Test site - [chikaoffor.com/chatapp](https://chikaoffor.com/chatapp).
 
 ## Table of contents
 * [General info](#general-info)
