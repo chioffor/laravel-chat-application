@@ -2,9 +2,8 @@
     <!-- Order your soul. Reduce your wants. - Augustine -->
     
 </div>
-
-<div class="group-page-chat-div chat-body p-2 border mt-2" id="group-page-chat-div">
-    <ul class="list-group" id="chat-message-info-list-item">
+<div class="chat-body p-2 border mt-2" id="chat-body">
+    <ul class="list-group" id="chat-message-info-list-items">
         @if (!$newUser)
             @foreach ($chats as $chat)
                 @if ($chat->created_at > $user->created_at)

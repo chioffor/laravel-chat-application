@@ -99,11 +99,15 @@ input[type="file"] {
     
 }
 
-.group-page-chat-div {
+.chat-body {
     height: 70vh;
     overflow-y: scroll;
     
 }
+/* #chat-message-info-list-item {
+    height: 50vh;
+    overflow-y: scroll;
+} */
 
 .form-control:focus {
     box-shadow: none;

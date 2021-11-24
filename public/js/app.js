@@ -1845,10 +1845,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _chatMessage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./chatMessage */ "./resources/js/chatMessage.js");
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./helpers */ "./resources/js/helpers.js");
 /* harmony import */ var _templates__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./templates */ "./resources/js/templates.js");
+/* harmony import */ var _handleFiles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./handleFiles */ "./resources/js/handleFiles.js");
+/* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./events */ "./resources/js/events.js");
 var _require = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js"),
     toArray = _require.toArray;
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
+
 
 
 
@@ -1859,73 +1863,35 @@ $.ajaxSetup({
   }
 });
 
-var handleFile = function handleFile(file) {
-  if (file.name.endsWith(".jpg")) {
-    var img = new Image(100, 100);
-    var imageDiv = document.getElementById("image-div-main");
-
-    if (imageDiv === null) {
-      $(".chat-body").append("<div class=\"mt-2 d-flex image-div-main border p-2 overflow-auto\" id=\"image-div-main\">\n                </div>");
-    }
-
-    img.classList.add("img-thumbnail");
-    img.classList.add("me-1");
-    img.file = file;
-    var imgID = Math.floor(Math.random() * 100000);
-    $(".image-div-main").append("<div class=\"image-div\" id=\"image-div-".concat(imgID, "\">\n                <button type=\"button\" class=\"img-thumbnail-btn-close btn-close\" aria-label=\"Close\"></button>\n            </div>"));
-    $("#image-div-" + imgID).append(img);
-    var reader = new FileReader();
-
-    reader.onload = function (asyncImg) {
-      return function (e) {
-        asyncImg.src = e.target.result;
-      };
-    }(img);
-
-    reader.readAsDataURL(file);
-  }
-};
-
 if (_helpers__WEBPACK_IMPORTED_MODULE_1__.chatDiv.length) {
   $((0,_helpers__WEBPACK_IMPORTED_MODULE_1__.scrollPageTop)(_helpers__WEBPACK_IMPORTED_MODULE_1__.chatDiv));
 }
 
 $(".file-upload").on('change', function () {
   var x = $("#input-file");
-  handleFile(x[0].files[0]);
+  (0,_handleFiles__WEBPACK_IMPORTED_MODULE_3__.handleFile)(x[0].files[0]);
   console.log(x[0].files[0].lastModified);
 });
-$(".create-new-group *").on("click", function (e) {
-  $(".create-new-group").remove();
-  (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.displayCreateInputDiv)();
+_events__WEBPACK_IMPORTED_MODULE_4__.default.createNewGroupButton.elem.on("click", function (e) {
+  _events__WEBPACK_IMPORTED_MODULE_4__.default.createNewGroupButton.processEvent();
 });
-$(".send").on("click", function (e) {
+_events__WEBPACK_IMPORTED_MODULE_4__.default.chatSendButton.elem.on("click", function (e) {
   e.preventDefault();
-  var c = new _chatMessage__WEBPACK_IMPORTED_MODULE_0__.ChatMessage();
-  c.sendChatData();
+  _events__WEBPACK_IMPORTED_MODULE_4__.default.chatSendButton.processEvent();
 });
-$(".emoji-picker-button").on("click", function (e) {
+_events__WEBPACK_IMPORTED_MODULE_4__.default.emojiPickerButton.elem.on("click", function (e) {
   e.preventDefault();
-  var emojiContent = $('.emoji-dropleft-content');
-  var display = $('.emoji-dropleft-content').css("display");
-
-  if (display == 'none') {
-    (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.showEmojiDisplay)();
-    (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.displayEmojis)();
-    (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.displayCategoryItems)('emoticons');
-  } else {
-    emojiContent.css("display", "none");
-  }
+  _events__WEBPACK_IMPORTED_MODULE_4__.default.emojiPickerButton.processEvent();
 });
-$("body").on("click", ".emoji-category", function (e) {
+_events__WEBPACK_IMPORTED_MODULE_4__.default.body.on("click", _events__WEBPACK_IMPORTED_MODULE_4__.default.emoji.emojiCategory.class_, function (e) {
   (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.displayCategoryItems)($(this).attr("id"));
 });
-$("body").on("click", ".emoji-selected", function () {
+_events__WEBPACK_IMPORTED_MODULE_4__.default.body.on("click", _events__WEBPACK_IMPORTED_MODULE_4__.default.emoji.emojiSelected.class_, function () {
   var textArea = $(".message");
   var newTextVal = textArea.val() + $(this).text();
   textArea.val(newTextVal);
 });
-$("body *").on("click", ":not(.emoji-picker-button, .emoji-dropleft-content, .emoji-dropleft-content *)", function (e) {
+_events__WEBPACK_IMPORTED_MODULE_4__.default.body.on("click", ":not(".concat(_events__WEBPACK_IMPORTED_MODULE_4__.default.emojiPickerButton.class_, ", .emoji-dropleft-content, .emoji-dropleft-content *)"), function (e) {
   if (e.target === this) {
     (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.hideEmojiDisplay)();
   } else {
@@ -2100,6 +2066,106 @@ var EmojiList = {
 
 /***/ }),
 
+/***/ "./resources/js/events.js":
+/*!********************************!*\
+  !*** ./resources/js/events.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers */ "./resources/js/helpers.js");
+
+var events = {
+  chatSendButton: {
+    class_: '.send',
+    elem: $('.send'),
+    processEvent: function processEvent() {
+      (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.processChatSendButtonEvent)();
+    }
+  },
+  emojiPickerButton: {
+    class_: '.emoji-picker-button',
+    elem: $(".emoji-picker-button"),
+    processEvent: function processEvent() {
+      (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.processemojiPickerButtonEvent)();
+    }
+  },
+  emoji: {
+    emojiCategory: {
+      class_: ".emoji-category",
+      elem: $(".emoji-category")
+    },
+    emojiSelected: {
+      class_: ".emoji-selected",
+      elem: $(".emoji-selected")
+    }
+  },
+  createNewGroupButton: {
+    class_: ".create-new-group",
+    elem: $(".create-new-group"),
+    processEvent: function processEvent() {
+      (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.processcreateNewGroupButtonEvent)();
+    }
+  },
+  body: $("body")
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (events);
+
+/***/ }),
+
+/***/ "./resources/js/handleFiles.js":
+/*!*************************************!*\
+  !*** ./resources/js/handleFiles.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "handleFile": () => (/* binding */ handleFile)
+/* harmony export */ });
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers */ "./resources/js/helpers.js");
+
+var handleFile = function handleFile(file) {
+  if (file.name.endsWith(".jpg")) {
+    var img = new Image(100, 100);
+    var imageDiv = document.getElementById("image-div-main");
+
+    if (imageDiv === null) {
+      $(".chat-body").append("<div \n                    class=\"mt-2 d-flex image-div-main border p-2 overflow-auto\" \n                    id=\"image-div-main\"\n                >\n                </div>");
+      var chatBodyDiv = $(".chat-body");
+      var chatMessageInfoListItemsDiv = $("#chat-message-info-list-items");
+      chatBodyDiv.css("height", "70vh");
+      chatBodyDiv.css("overflow-y", "hidden");
+      chatMessageInfoListItemsDiv.css("height", "50vh");
+      chatMessageInfoListItemsDiv.css("overflow-y", "scroll");
+      (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.scrollPageTop)(chatMessageInfoListItemsDiv); //$("#chat-message-info-list-item").scrollTop($("#chat-message-info-list-item")[0].scrollHeight);
+    }
+
+    img.classList.add("img-thumbnail");
+    img.classList.add("me-1");
+    img.file = file;
+    var imgID = Math.floor(Math.random() * 100000);
+    $(".image-div-main").append("<div class=\"image-div\" id=\"image-div-".concat(imgID, "\">\n                <button type=\"button\" class=\"img-thumbnail-btn-close btn-close\" aria-label=\"Close\"></button>\n            </div>"));
+    $("#image-div-" + imgID).append(img);
+    var reader = new FileReader();
+
+    reader.onload = function (asyncImg) {
+      return function (e) {
+        asyncImg.src = e.target.result;
+      };
+    }(img);
+
+    reader.readAsDataURL(file);
+  }
+};
+
+/***/ }),
+
 /***/ "./resources/js/helpers.js":
 /*!*********************************!*\
   !*** ./resources/js/helpers.js ***!
@@ -2109,6 +2175,9 @@ var EmojiList = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "processChatSendButtonEvent": () => (/* binding */ processChatSendButtonEvent),
+/* harmony export */   "processemojiPickerButtonEvent": () => (/* binding */ processemojiPickerButtonEvent),
+/* harmony export */   "processcreateNewGroupButtonEvent": () => (/* binding */ processcreateNewGroupButtonEvent),
 /* harmony export */   "chatDiv": () => (/* binding */ chatDiv),
 /* harmony export */   "hideEmojiDisplay": () => (/* binding */ hideEmojiDisplay),
 /* harmony export */   "showEmojiDisplay": () => (/* binding */ showEmojiDisplay),
@@ -2122,8 +2191,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "updateCanvas": () => (/* binding */ updateCanvas)
 /* harmony export */ });
 /* harmony import */ var _emojis__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./emojis */ "./resources/js/emojis.js");
+/* harmony import */ var _chatMessage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chatMessage */ "./resources/js/chatMessage.js");
 
-var chatDiv = $("#group-page-chat-div");
+
+var processChatSendButtonEvent = function processChatSendButtonEvent() {
+  var c = new _chatMessage__WEBPACK_IMPORTED_MODULE_1__.ChatMessage();
+  c.sendChatData();
+};
+var processemojiPickerButtonEvent = function processemojiPickerButtonEvent() {
+  var emojiContent = $('.emoji-dropleft-content');
+  var display = $('.emoji-dropleft-content').css("display");
+
+  if (display == 'none') {
+    showEmojiDisplay();
+    displayEmojis();
+    displayCategoryItems('emoticons');
+  } else {
+    emojiContent.css("display", "none");
+  }
+};
+var processcreateNewGroupButtonEvent = function processcreateNewGroupButtonEvent() {
+  $(".create-new-group").remove();
+  displayCreateInputDiv();
+}; //
+
+var chatDiv = $("#chat-body");
 var hideEmojiDisplay = function hideEmojiDisplay() {
   $(".emoji-dropleft-content").css("display", "none");
 };
@@ -2156,13 +2248,19 @@ var appendUserToMembersList = function appendUserToMembersList(name) {
   $('#members-list').append("<li class=\"list-group-item d-flex\">\n            <div><i class=\"bi bi-circle-fill me-2\" style=\"color: green;\"></i></div>\n            <div>".concat(name, "</div>\n        </li>"));
 };
 var scrollPageTop = function scrollPageTop(elem) {
-  elem.scrollTop(elem[0].scrollHeight);
+  var imgDiv = document.getElementById("image-div-main");
+
+  if (imgDiv !== null) {
+    $("#chat-message-info-list-items").scrollTop($("#chat-message-info-list-items")[0].scrollHeight);
+  } else {
+    elem.scrollTop(elem[0].scrollHeight);
+  }
 };
 var displayCreateInputDiv = function displayCreateInputDiv() {
   $('#group-form').append("<div class=\"input-group mb-2\">\n            <input type=\"text\" class=\"form-control\" placeholder=\"Choose a name\" name=\"group-name\">\n            <input type=\"submit\" class=\"btn btn-outline-secondary\" value=\"Submit\">\n        </div>");
 };
 var appendChat = function appendChat(template) {
-  $('#chat-message-info-list-item').append(template);
+  $('#chat-message-info-list-items').append(template);
   scrollPageTop(chatDiv);
 };
 var checkUrl = function checkUrl(url) {

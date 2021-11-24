@@ -21,7 +21,7 @@
             
            
             <label class="file-upload btn me-2">
-                <!-- <input type="file" id="input-file"/> -->
+                <input type="file" id="input-file"/>
                 <i class="bi bi-image" style="font-size: 2rem;"></i>
             </label>
             <button class="btn send btn-secondary" type="button">send</i></button>

@@ -1,7 +1,44 @@
 import { EmojiList } from "./emojis";
+import { ChatMessage} from './chatMessage';
 
 
-export const chatDiv = $( "#group-page-chat-div" );
+
+
+
+
+
+export const processChatSendButtonEvent = () => {
+    let c = new ChatMessage();
+    c.sendChatData();
+}
+
+export const processemojiPickerButtonEvent = () => {
+    let emojiContent = $('.emoji-dropleft-content');
+    let display = $('.emoji-dropleft-content').css("display");
+    if (display == 'none') { 
+        showEmojiDisplay();       
+        displayEmojis();
+        displayCategoryItems('emoticons');     
+                
+    } else {        
+        emojiContent.css("display", "none");           
+    }
+}
+
+export const processcreateNewGroupButtonEvent = () => {
+    $(".create-new-group").remove();
+    displayCreateInputDiv();
+}
+
+
+
+
+
+
+
+//
+
+export const chatDiv = $( "#chat-body");
 
 export const hideEmojiDisplay = () => {
     $(".emoji-dropleft-content").css("display", "none");
@@ -52,7 +89,12 @@ export const appendUserToMembersList = (name) => {
 
 
 export const scrollPageTop = (elem) => {
-    elem.scrollTop(elem[0].scrollHeight);
+    let imgDiv = document.getElementById("image-div-main");
+    if (imgDiv !== null) {
+        $("#chat-message-info-list-items").scrollTop($("#chat-message-info-list-items")[0].scrollHeight);
+    } else {
+        elem.scrollTop(elem[0].scrollHeight);
+    }
 }
 
 export const displayCreateInputDiv = () => {
@@ -65,7 +107,7 @@ export const displayCreateInputDiv = () => {
 }
 
 export const appendChat = (template) => {
-    $('#chat-message-info-list-item').append(
+    $('#chat-message-info-list-items').append(
         template
     );
     scrollPageTop(chatDiv);

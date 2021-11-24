@@ -24,42 +24,15 @@ import {
     chatTemplate
 } from './templates';
 
+import { handleFile } from './handleFiles';
+import Event from './events';
+
 $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
 
-const handleFile = (file) => {
-    if (file.name.endsWith(".jpg")) {
-        const img = new Image(100, 100);
-        let imageDiv = document.getElementById("image-div-main");
-        if (imageDiv === null) {
-            $(".chat-body").append(
-                `<div class="mt-2 d-flex image-div-main border p-2 overflow-auto" id="image-div-main">
-                </div>`
-            );
-        } 
-        img.classList.add("img-thumbnail");
-        img.classList.add("me-1");
-        img.file = file;
-        let imgID = Math.floor(Math.random() * 100000);
-        $(".image-div-main").append(
-            `<div class="image-div" id="image-div-${imgID}">
-                <button type="button" class="img-thumbnail-btn-close btn-close" aria-label="Close"></button>
-            </div>`
-        );
-        $("#image-div-" + imgID).append(img);
-        
-        const reader = new FileReader();
-        reader.onload = (function(asyncImg) {
-            return function(e) {
-                asyncImg.src = e.target.result;
-            };
-        })(img);
-        reader.readAsDataURL(file);
-    }
-}
 
 if (chatDiv.length) {
     $(scrollPageTop(chatDiv));
@@ -71,43 +44,32 @@ $(".file-upload").on('change', function() {
     console.log(x[0].files[0].lastModified);
 });
 
-$(".create-new-group *").on("click", function(e) {
-    $(".create-new-group").remove();
-    displayCreateInputDiv();
+Event.createNewGroupButton.elem.on("click", function(e) {
+    Event.createNewGroupButton.processEvent();
 });
 
-$( ".send" ).on("click", function(e) {
+Event.chatSendButton.elem.on("click", function(e) {
     e.preventDefault();
-    let c = new ChatMessage();
-    c.sendChatData();
+    Event.chatSendButton.processEvent();
 });
 
-$( ".emoji-picker-button" ).on("click", function(e) {
+Event.emojiPickerButton.elem.on("click", function(e) {
     e.preventDefault();
-    let emojiContent = $('.emoji-dropleft-content');
-    let display = $('.emoji-dropleft-content').css("display");
-    if (display == 'none') { 
-        showEmojiDisplay();       
-        displayEmojis();
-        displayCategoryItems('emoticons');     
-                
-    } else {        
-        emojiContent.css("display", "none");           
-    }
+    Event.emojiPickerButton.processEvent();
 });
 
 
-$("body").on("click", ".emoji-category", function(e) {    
+Event.body.on("click", Event.emoji.emojiCategory.class_, function(e) {    
     displayCategoryItems($(this).attr("id"));
 });
 
-$("body").on("click", ".emoji-selected", function() {
+Event.body.on("click", Event.emoji.emojiSelected.class_, function() {
     let textArea = $(".message");
     let newTextVal = textArea.val() + $(this).text();
     textArea.val(newTextVal);
 });
 
-$("body *").on("click", ":not(.emoji-picker-button, .emoji-dropleft-content, .emoji-dropleft-content *)", function (e) {
+Event.body.on("click", `:not(${Event.emojiPickerButton.class_}, .emoji-dropleft-content, .emoji-dropleft-content *)`, function (e) {
     if (e.target === this) {
         hideEmojiDisplay();
     } else {
