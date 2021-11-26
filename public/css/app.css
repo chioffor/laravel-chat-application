@@ -79,6 +79,7 @@ input[type="file"] {
     } */
     .chat-list-item, .chat-list-item-user {
         width: 80%;
+        
     }
 }
 
@@ -90,7 +91,7 @@ input[type="file"] {
       margin-bottom: 0;
     }
     .chat-list-item, .chat-list-item-user, .image-div-main {
-        width: 60%;        
+        width: 100%;        
     }
     
     /* .chat-list-item-user {

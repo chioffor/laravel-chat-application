@@ -2127,27 +2127,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers */ "./resources/js/helpers.js");
 
+var image_main_div = "<div \n    class=\"mt-2 d-flex image-div-main border p-2 overflow-auto\"\n    id=\"image-div-main\"\n    >\n        <div class=\"flex-grow-1 btn\">Send</div>\n    </div>";
+
+var image_div = function image_div(imgID) {
+  return "<div class=\"image-div\" id=\"image-div-".concat(imgID, "\">\n            <button type=\"button\" class=\"img-thumbnail-btn-close btn-close\" aria-label=\"Close\"></button>\n        </div>");
+};
+
 var handleFile = function handleFile(file) {
   if (file.name.endsWith(".jpg")) {
     var img = new Image(100, 100);
     var imageDiv = document.getElementById("image-div-main");
 
     if (imageDiv === null) {
-      $(".chat-body").append("<div \n                    class=\"mt-2 d-flex image-div-main border p-2 overflow-auto\" \n                    id=\"image-div-main\"\n                >\n                </div>");
+      $(".chat-body").append(image_main_div);
       var chatBodyDiv = $(".chat-body");
       var chatMessageInfoListItemsDiv = $("#chat-message-info-list-items");
       chatBodyDiv.css("height", "70vh");
       chatBodyDiv.css("overflow-y", "hidden");
       chatMessageInfoListItemsDiv.css("height", "50vh");
       chatMessageInfoListItemsDiv.css("overflow-y", "scroll");
-      (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.scrollPageTop)(chatMessageInfoListItemsDiv); //$("#chat-message-info-list-item").scrollTop($("#chat-message-info-list-item")[0].scrollHeight);
+      (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.scrollPageTop)(chatMessageInfoListItemsDiv);
     }
 
     img.classList.add("img-thumbnail");
     img.classList.add("me-1");
     img.file = file;
     var imgID = Math.floor(Math.random() * 100000);
-    $(".image-div-main").append("<div class=\"image-div\" id=\"image-div-".concat(imgID, "\">\n                <button type=\"button\" class=\"img-thumbnail-btn-close btn-close\" aria-label=\"Close\"></button>\n            </div>"));
+    $(".image-div-main").prepend(image_div(imgID));
     $("#image-div-" + imgID).append(img);
     var reader = new FileReader();
 

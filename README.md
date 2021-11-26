@@ -1,8 +1,6 @@
 # Chat App   
 An implementation of a chat application using lavarel framework.
 
--Test site - [chikaoffor.com/chatapp](https://chikaoffor.com/chatapp).
-
 ## Table of contents
 * [General info](#general-info)
 <!-- * [Screenshots](#screenshots) -->
@@ -28,8 +26,6 @@ This app is an implementation of the idea of a chat application.
 * Kubernetes
 
 ## Setup
-The easiest way to view and see the functionalities - visit the test site `https://chikaoffor.com/chatapp`
-
 To run on your system via composer:
 ```
 $ git clone https://github.com/chioffor/laravel-chat-application.git
