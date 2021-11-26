@@ -9,7 +9,7 @@ import {
     appendUserToMembersList,
     displayEmojis,
     scrollPageTop,
-    displayCategoryItems,
+    // displayCategoryItems,
     hideEmojiDisplay,
     showEmojiDisplay,
     displayCreateInputDiv,
@@ -25,7 +25,7 @@ import {
 } from './templates';
 
 import { handleFile } from './handleFiles';
-import Event from './events';
+import { events } from './events';
 
 $.ajaxSetup({
     headers: {
@@ -44,32 +44,31 @@ $(".file-upload").on('change', function() {
     console.log(x[0].files[0].lastModified);
 });
 
-Event.createNewGroupButton.elem.on("click", function(e) {
-    Event.createNewGroupButton.processEvent();
-});
-
-Event.chatSendButton.elem.on("click", function(e) {
+$(events.chatSendButton.class_).on("click", function(e) {
     e.preventDefault();
-    Event.chatSendButton.processEvent();
+    events.chatSendButton.processEvent();
 });
 
-Event.emojiPickerButton.elem.on("click", function(e) {
+$(events.emojiPickerButton.class_).on("click", function(e) {
     e.preventDefault();
-    Event.emojiPickerButton.processEvent();
+    events.emojiPickerButton.processEvent();
 });
 
-
-Event.body.on("click", Event.emoji.emojiCategory.class_, function(e) {    
-    displayCategoryItems($(this).attr("id"));
+$(events.createNewGroupButton.class_).on("click", function(e) {
+    events.createNewGroupButton.processEvent();
 });
 
-Event.body.on("click", Event.emoji.emojiSelected.class_, function() {
+events.body.on("click", events.emoji.emojiCategory.class_, function(e) {
+    events.emoji.emojiCategory.processEvent($(this).attr("id"));   
+});
+
+events.body.on("click", events.emoji.emojiSelected.class_, function() {
     let textArea = $(".message");
     let newTextVal = textArea.val() + $(this).text();
     textArea.val(newTextVal);
 });
 
-Event.body.on("click", `:not(${Event.emojiPickerButton.class_}, .emoji-dropleft-content, .emoji-dropleft-content *)`, function (e) {
+events.body.on("click", `:not(${events.emojiPickerButton.class_}, .emoji-dropleft-content, .emoji-dropleft-content *)`, function (e) {
     if (e.target === this) {
         hideEmojiDisplay();
     } else {

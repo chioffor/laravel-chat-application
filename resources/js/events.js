@@ -2,37 +2,38 @@ import {
     processChatSendButtonEvent,
     processemojiPickerButtonEvent,
     processcreateNewGroupButtonEvent,
+    processEmojiCategoryEvent,
+
 } from "./helpers";
 
-const events = {
+export const events = {
     chatSendButton: {
-        class_: '.send',
-        elem: $('.send'),
-        processEvent: function() {
-            processChatSendButtonEvent();
+        class_: ".send",
+        processEvent() {
+            processChatSendButtonEvent()
         }
     },
+   
     emojiPickerButton: {
         class_: '.emoji-picker-button',
-        elem: $( ".emoji-picker-button" ),
-        processEvent: function() {
+        processEvent() {
             processemojiPickerButtonEvent();
         }
     },
     emoji: {
         emojiCategory: {
             class_: ".emoji-category",
-            elem: $(".emoji-category"),
+            processEvent(id) {
+                processEmojiCategoryEvent(id);
+            }
         },
         emojiSelected: {
             class_: ".emoji-selected",
-            elem: $(".emoji-selected"),
         }
     },
     createNewGroupButton: {
         class_: ".create-new-group",
-        elem: $(".create-new-group"),
-        processEvent: function() {
+        processEvent() {
             processcreateNewGroupButtonEvent();
         }
     },
@@ -40,4 +41,3 @@ const events = {
     body: $("body"),
 }
 
-export default events;

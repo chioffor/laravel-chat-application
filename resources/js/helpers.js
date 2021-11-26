@@ -3,7 +3,17 @@ import { ChatMessage} from './chatMessage';
 
 
 
-
+const displayCategoryItems = (k) => {
+    const emojiCategorySelectedDiv = $('.emoji-category-selected');
+    const emojis = EmojiList[k];
+    let emjs = ``;
+    emojis.forEach(e => (
+        emjs += `<div class="col emoji-selected">${String.fromCodePoint("0x" + e)}</div>`
+    ))
+    emojiCategorySelectedDiv.html(
+        emjs
+    );
+}
 
 
 
@@ -29,6 +39,11 @@ export const processcreateNewGroupButtonEvent = () => {
     $(".create-new-group").remove();
     displayCreateInputDiv();
 }
+
+export const processEmojiCategoryEvent = (id) => {
+    displayCategoryItems(id);
+}
+
 
 
 
@@ -64,19 +79,6 @@ export const displayEmojis = () => {
         divs
     );
 }
-
-export const displayCategoryItems = (t) => {
-    const emojiCategorySelectedDiv = $('.emoji-category-selected');
-    const emojis = EmojiList[t];
-    let emjs = ``;
-    emojis.forEach(e => (
-        emjs += `<div class="col emoji-selected">${String.fromCodePoint("0x" + e)}</div>`
-    ))
-    emojiCategorySelectedDiv.html(
-        emjs
-    );
-}
-
 
 export const appendUserToMembersList = (name) => {
     $('#members-list').append(

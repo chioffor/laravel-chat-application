@@ -1872,26 +1872,26 @@ $(".file-upload").on('change', function () {
   (0,_handleFiles__WEBPACK_IMPORTED_MODULE_3__.handleFile)(x[0].files[0]);
   console.log(x[0].files[0].lastModified);
 });
-_events__WEBPACK_IMPORTED_MODULE_4__.default.createNewGroupButton.elem.on("click", function (e) {
-  _events__WEBPACK_IMPORTED_MODULE_4__.default.createNewGroupButton.processEvent();
-});
-_events__WEBPACK_IMPORTED_MODULE_4__.default.chatSendButton.elem.on("click", function (e) {
+$(_events__WEBPACK_IMPORTED_MODULE_4__.events.chatSendButton.class_).on("click", function (e) {
   e.preventDefault();
-  _events__WEBPACK_IMPORTED_MODULE_4__.default.chatSendButton.processEvent();
+  _events__WEBPACK_IMPORTED_MODULE_4__.events.chatSendButton.processEvent();
 });
-_events__WEBPACK_IMPORTED_MODULE_4__.default.emojiPickerButton.elem.on("click", function (e) {
+$(_events__WEBPACK_IMPORTED_MODULE_4__.events.emojiPickerButton.class_).on("click", function (e) {
   e.preventDefault();
-  _events__WEBPACK_IMPORTED_MODULE_4__.default.emojiPickerButton.processEvent();
+  _events__WEBPACK_IMPORTED_MODULE_4__.events.emojiPickerButton.processEvent();
 });
-_events__WEBPACK_IMPORTED_MODULE_4__.default.body.on("click", _events__WEBPACK_IMPORTED_MODULE_4__.default.emoji.emojiCategory.class_, function (e) {
-  (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.displayCategoryItems)($(this).attr("id"));
+$(_events__WEBPACK_IMPORTED_MODULE_4__.events.createNewGroupButton.class_).on("click", function (e) {
+  _events__WEBPACK_IMPORTED_MODULE_4__.events.createNewGroupButton.processEvent();
 });
-_events__WEBPACK_IMPORTED_MODULE_4__.default.body.on("click", _events__WEBPACK_IMPORTED_MODULE_4__.default.emoji.emojiSelected.class_, function () {
+_events__WEBPACK_IMPORTED_MODULE_4__.events.body.on("click", _events__WEBPACK_IMPORTED_MODULE_4__.events.emoji.emojiCategory.class_, function (e) {
+  _events__WEBPACK_IMPORTED_MODULE_4__.events.emoji.emojiCategory.processEvent($(this).attr("id"));
+});
+_events__WEBPACK_IMPORTED_MODULE_4__.events.body.on("click", _events__WEBPACK_IMPORTED_MODULE_4__.events.emoji.emojiSelected.class_, function () {
   var textArea = $(".message");
   var newTextVal = textArea.val() + $(this).text();
   textArea.val(newTextVal);
 });
-_events__WEBPACK_IMPORTED_MODULE_4__.default.body.on("click", ":not(".concat(_events__WEBPACK_IMPORTED_MODULE_4__.default.emojiPickerButton.class_, ", .emoji-dropleft-content, .emoji-dropleft-content *)"), function (e) {
+_events__WEBPACK_IMPORTED_MODULE_4__.events.body.on("click", ":not(".concat(_events__WEBPACK_IMPORTED_MODULE_4__.events.emojiPickerButton.class_, ", .emoji-dropleft-content, .emoji-dropleft-content *)"), function (e) {
   if (e.target === this) {
     (0,_helpers__WEBPACK_IMPORTED_MODULE_1__.hideEmojiDisplay)();
   } else {
@@ -2075,21 +2075,19 @@ var EmojiList = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */   "events": () => (/* binding */ events)
 /* harmony export */ });
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers */ "./resources/js/helpers.js");
 
 var events = {
   chatSendButton: {
-    class_: '.send',
-    elem: $('.send'),
+    class_: ".send",
     processEvent: function processEvent() {
       (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.processChatSendButtonEvent)();
     }
   },
   emojiPickerButton: {
     class_: '.emoji-picker-button',
-    elem: $(".emoji-picker-button"),
     processEvent: function processEvent() {
       (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.processemojiPickerButtonEvent)();
     }
@@ -2097,23 +2095,22 @@ var events = {
   emoji: {
     emojiCategory: {
       class_: ".emoji-category",
-      elem: $(".emoji-category")
+      processEvent: function processEvent(id) {
+        (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.processEmojiCategoryEvent)(id);
+      }
     },
     emojiSelected: {
-      class_: ".emoji-selected",
-      elem: $(".emoji-selected")
+      class_: ".emoji-selected"
     }
   },
   createNewGroupButton: {
     class_: ".create-new-group",
-    elem: $(".create-new-group"),
     processEvent: function processEvent() {
       (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.processcreateNewGroupButtonEvent)();
     }
   },
   body: $("body")
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (events);
 
 /***/ }),
 
@@ -2178,11 +2175,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "processChatSendButtonEvent": () => (/* binding */ processChatSendButtonEvent),
 /* harmony export */   "processemojiPickerButtonEvent": () => (/* binding */ processemojiPickerButtonEvent),
 /* harmony export */   "processcreateNewGroupButtonEvent": () => (/* binding */ processcreateNewGroupButtonEvent),
+/* harmony export */   "processEmojiCategoryEvent": () => (/* binding */ processEmojiCategoryEvent),
 /* harmony export */   "chatDiv": () => (/* binding */ chatDiv),
 /* harmony export */   "hideEmojiDisplay": () => (/* binding */ hideEmojiDisplay),
 /* harmony export */   "showEmojiDisplay": () => (/* binding */ showEmojiDisplay),
 /* harmony export */   "displayEmojis": () => (/* binding */ displayEmojis),
-/* harmony export */   "displayCategoryItems": () => (/* binding */ displayCategoryItems),
 /* harmony export */   "appendUserToMembersList": () => (/* binding */ appendUserToMembersList),
 /* harmony export */   "scrollPageTop": () => (/* binding */ scrollPageTop),
 /* harmony export */   "displayCreateInputDiv": () => (/* binding */ displayCreateInputDiv),
@@ -2193,6 +2190,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _emojis__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./emojis */ "./resources/js/emojis.js");
 /* harmony import */ var _chatMessage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./chatMessage */ "./resources/js/chatMessage.js");
 
+
+
+var displayCategoryItems = function displayCategoryItems(k) {
+  var emojiCategorySelectedDiv = $('.emoji-category-selected');
+  var emojis = _emojis__WEBPACK_IMPORTED_MODULE_0__.EmojiList[k];
+  var emjs = "";
+  emojis.forEach(function (e) {
+    return emjs += "<div class=\"col emoji-selected\">".concat(String.fromCodePoint("0x" + e), "</div>");
+  });
+  emojiCategorySelectedDiv.html(emjs);
+};
 
 var processChatSendButtonEvent = function processChatSendButtonEvent() {
   var c = new _chatMessage__WEBPACK_IMPORTED_MODULE_1__.ChatMessage();
@@ -2213,6 +2221,9 @@ var processemojiPickerButtonEvent = function processemojiPickerButtonEvent() {
 var processcreateNewGroupButtonEvent = function processcreateNewGroupButtonEvent() {
   $(".create-new-group").remove();
   displayCreateInputDiv();
+};
+var processEmojiCategoryEvent = function processEmojiCategoryEvent(id) {
+  displayCategoryItems(id);
 }; //
 
 var chatDiv = $("#chat-body");
@@ -2234,15 +2245,6 @@ var displayEmojis = function displayEmojis() {
     return divs += "<div class=\"me-2 emoji-category\" id=\"".concat(emojiChoicesKeys[emojiChoices.indexOf(e)], "\">").concat(e, "</div>");
   });
   emojisDiv.html(divs);
-};
-var displayCategoryItems = function displayCategoryItems(t) {
-  var emojiCategorySelectedDiv = $('.emoji-category-selected');
-  var emojis = _emojis__WEBPACK_IMPORTED_MODULE_0__.EmojiList[t];
-  var emjs = "";
-  emojis.forEach(function (e) {
-    return emjs += "<div class=\"col emoji-selected\">".concat(String.fromCodePoint("0x" + e), "</div>");
-  });
-  emojiCategorySelectedDiv.html(emjs);
 };
 var appendUserToMembersList = function appendUserToMembersList(name) {
   $('#members-list').append("<li class=\"list-group-item d-flex\">\n            <div><i class=\"bi bi-circle-fill me-2\" style=\"color: green;\"></i></div>\n            <div>".concat(name, "</div>\n        </li>"));
